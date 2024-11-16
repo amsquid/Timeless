@@ -6,9 +6,9 @@ public class HUDMesh extends BaseMesh {
 
 	static float[] vertices = new float[]{
 			0.0f, 0.0f, 0.0f,
-			0.0f, 100.0f, 0.0f,
-			100.0f, 100.0f, 0.0f,
-			100.0f, 100.0f, 0.0f,
+			0.0f, 1.0f, 0.0f,
+			1.0f, 1.0f, 0.0f,
+			1.0f, 0.0f, 0.0f,
 	};
 
 	static int[] indices = new int[]{
@@ -20,7 +20,7 @@ public class HUDMesh extends BaseMesh {
 			-1.0f, -1.0f,
 			-1.0f, 1.0f,
 			1.0f, 1.0f,
-			1.0f, 1.0f,
+			1.0f, -1.0f,
 	};
 
 	public HUDMesh(Texture texture) {

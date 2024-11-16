@@ -47,7 +47,7 @@ public class Camera extends Entity {
 				.rotateY((float) Math.toRadians(getRotation().y))
 				.rotateZ((float) Math.toRadians(getRotation().z));
 
-		orthographicMatrix = new Matrix4f().setOrtho2D(0, windowWidth, windowHeight, 0);
+		orthographicMatrix = new Matrix4f().setOrtho2D(0.0f, 1.0f, 1.0f, 0.0f);
 	}
 
 	public void updateMatrices(float fovAngle) {

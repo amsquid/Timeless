@@ -69,7 +69,7 @@ public class Renderer {
 	public void render(HUDItem item, Camera camera) {
 		d2Shader.bind();
 
-		d2Shader.setUniform("modelViewMatrix", camera.getOrthographicMatrix());
+		d2Shader.setUniform("projectionMatrix", camera.getOrthographicMatrix());
 
 		item.render();
 

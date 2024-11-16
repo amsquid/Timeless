@@ -10,6 +10,7 @@ import me.joepeterson.Timeless.engine.texture.Texture;
 import me.joepeterson.Timeless.engine.util.Vector;
 import me.joepeterson.Timeless.engine.world.World;
 import me.joepeterson.Timeless.entities.Player;
+import me.joepeterson.Timeless.hud.Crosshair;
 import me.joepeterson.Timeless.worlds.SpaceWorld;
 import org.joml.Vector2d;
 import org.joml.Vector3f;
@@ -54,6 +55,10 @@ public class Game implements IGameLogic {
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
 
+		// Alpha Blending
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 		// Setup
 		this.window = window;
 
@@ -68,9 +73,7 @@ public class Game implements IGameLogic {
 
 		// HUD
 		try {
-			Texture testTexture = new Texture("textures/ui/test.png");
-
-			hud.addHUDItem(new HUDItem(testTexture));
+			hud.addHUDItem(new Crosshair());
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -218,7 +221,7 @@ public class Game implements IGameLogic {
 			}
 
 			for(HUDItem item : hud.getHUDItems()) {
-				item.render();
+				renderer.render(item, camera);
 			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
