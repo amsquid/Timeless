@@ -25,6 +25,14 @@ public class Camera extends Entity {
 	private int windowWidth;
 	private int windowHeight;
 
+	public int getWindowWidth() {
+		return windowWidth;
+	}
+
+	public int getWindowHeight() {
+		return windowHeight;
+	}
+
 	public Camera(Window window) {
 		super();
 
