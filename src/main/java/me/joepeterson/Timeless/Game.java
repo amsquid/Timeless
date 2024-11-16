@@ -83,8 +83,94 @@ public class Game implements IGameLogic {
 
 	@Override
 	public void input(Window window) {
-		keyInput();
-		mouseInput();
+		// Quit
+		if(window.isKeyPressed(GLFW_KEY_ESCAPE)) {
+			quit();
+		}
+
+		// Movement
+		float horizontal = 0.0f;
+		float up = 0.0f;
+		float vertical = 0.0f;
+
+		float speedMultiplier = 0.05f;
+		float fov = (float) Math.toDegrees(camera.startFOV);
+
+		if(window.isKeyPressed(GLFW_KEY_S)) {
+			horizontal -= 1f;
+		}
+
+		if(window.isKeyPressed(GLFW_KEY_W)) {
+			horizontal += 1f;
+		}
+
+		if(window.isKeyPressed(GLFW_KEY_A)) {
+			vertical -= 1f;
+		}
+
+		if(window.isKeyPressed(GLFW_KEY_D)) {
+			vertical += 1f;
+		}
+
+		if(window.isKeyPressed(GLFW_KEY_SPACE)) {
+			up += 1f;
+		}
+
+		if(window.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) {
+			up -= 1f;
+		}
+
+		player.sprinting = window.isKeyPressed(GLFW_KEY_LEFT_CONTROL);
+
+		if(player.sprinting) {
+			speedMultiplier *= 2;
+			fov += 15.0f;
+		}
+
+		camera.updateMatrices(fov);
+
+		Vector3f velocity = player.getVelocityForward(horizontal, up, vertical);
+
+		velocity = Vector.multiplyVector(velocity, speedMultiplier);
+
+		// Future Velocities
+		Vector3f futureForwardVelocity = new Vector3f(0.0f, 0.0f, velocity.z);
+		Vector3f futureUpVelocity = new Vector3f(0.0f, velocity.y, 0.0f);
+		Vector3f futureRightVelocity = new Vector3f(velocity.x, 0.0f, 0.0f);
+
+		// Doing collision checks for each of the future velocities
+		boolean futureForwardCollision = player.checkBlockCollisions(futureForwardVelocity, world.getBlocks());
+		boolean futureUpCollision = player.checkBlockCollisions(futureUpVelocity, world.getBlocks());
+		boolean futureRightCollision = player.checkBlockCollisions(futureRightVelocity, world.getBlocks());
+
+		// Stopping the player in the direction they're colliding with
+		if(futureForwardCollision) velocity = new Vector3f(velocity.x, velocity.y, 0.0f);
+		if(futureUpCollision) velocity = new Vector3f(velocity.x, 0.0f, velocity.z);
+		if(futureRightCollision) velocity = new Vector3f(0.0f, velocity.y, velocity.z);;
+
+		// Updating velocities based on collisions
+		player.setVelocity(velocity.x, velocity.y, velocity.z);
+
+		// Mouse Related inputs
+		if(window.isKeyPressed(GLFW_KEY_GRAVE_ACCENT)) { // Unlocking cursor
+			glfwSetInputMode(window.windowHandle, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		}
+
+		if(window.isMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT) && !brokenBlock) {
+			Block lookingBlock = camera.rayMarchBlock(world, 5);
+
+			if(lookingBlock != null) {
+				if(!world.deleteBlock(lookingBlock.position)) System.out.println("Couldn't delete block");
+
+				world.fixFaces();
+			}
+
+			brokenBlock = true;
+		}
+
+		if(window.isMouseButtonReleased(GLFW_MOUSE_BUTTON_LEFT)) {
+			brokenBlock = false;
+		}
 	}
 
 	@Override
@@ -154,82 +240,5 @@ public class Game implements IGameLogic {
 	@Override
 	public void quit() {
 		glfwSetWindowShouldClose(window.windowHandle, true);
-	}
-
-	// Methods for each of the input methods
-	void keyInput() {
-		// Quit
-		if(window.isKeyPressed(GLFW_KEY_ESCAPE)) {
-			quit();
-		}
-
-		// Movement
-		float horizontal = 0.0f;
-		float up = 0.0f;
-		float vertical = 0.0f;
-
-		float speedMultiplier = 0.05f;
-		float fov = (float) Math.toDegrees(camera.startFOV);
-
-		if(window.isKeyPressed(GLFW_KEY_S)) {
-			horizontal -= 1f;
-		}
-
-		if(window.isKeyPressed(GLFW_KEY_W)) {
-			horizontal += 1f;
-		}
-
-		if(window.isKeyPressed(GLFW_KEY_A)) {
-			vertical -= 1f;
-		}
-
-		if(window.isKeyPressed(GLFW_KEY_D)) {
-			vertical += 1f;
-		}
-
-		if(window.isKeyPressed(GLFW_KEY_SPACE)) {
-			up += 1f;
-		}
-
-		if(window.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) {
-			up -= 1f;
-		}
-
-		player.sprinting = window.isKeyPressed(GLFW_KEY_LEFT_CONTROL);
-
-		if(player.sprinting) {
-			speedMultiplier *= 2;
-			fov += 15.0f;
-		}
-
-		camera.updateMatrices(fov);
-
-		Vector3f velocity = player.getVelocityForward(horizontal, up, vertical);
-		velocity = Vector.multiplyVector(velocity, speedMultiplier);
-
-		player.moveAndCollide(velocity, world);
-	}
-
-	void mouseInput() {
-		// Mouse Related inputs
-		if(window.isKeyPressed(GLFW_KEY_GRAVE_ACCENT)) { // Unlocking cursor
-			glfwSetInputMode(window.windowHandle, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-		}
-
-		if(window.isMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT) && !brokenBlock) {
-			Block lookingBlock = camera.rayMarchBlock(world, 5);
-
-			if(lookingBlock != null) {
-				if(!world.deleteBlock(lookingBlock.position)) System.out.println("Couldn't delete block");
-
-				world.fixFaces();
-			}
-
-			brokenBlock = true;
-		}
-
-		if(window.isMouseButtonReleased(GLFW_MOUSE_BUTTON_LEFT)) {
-			brokenBlock = false;
-		}
 	}
 }

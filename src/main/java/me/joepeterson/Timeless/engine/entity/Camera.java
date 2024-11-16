@@ -1,5 +1,6 @@
 package me.joepeterson.Timeless.engine.entity;
 
+import me.joepeterson.Timeless.engine.BoundingBox;
 import me.joepeterson.Timeless.engine.Window;
 import me.joepeterson.Timeless.engine.block.Block;
 import me.joepeterson.Timeless.engine.util.Vector;
@@ -151,4 +152,36 @@ public class Camera extends Entity {
 
 		return null;
 	}
+
+	public Vector3f rayCastBlock(World world, int maxDistance) {
+		Vector3f rayOrigin = getPosition();
+		Vector3f rayDirection = getViewMatrix().positiveZ(new Vector3f(getRotation().x, getRotation().y, getRotation().z)).negate();
+
+		float tMin = Z_NEAR; // minimum distance to consider an intersection
+		float tMax = maxDistance; // maximum distance to consider an intersection
+
+		Vector3f intersectionPoint = null;
+		Vector3f normalVector = null;
+
+		// Iterate through the blocks in the scene
+		for (Block block : world.getBlocks().values()) {
+			// Get the bounding box of the block
+			BoundingBox box = block.boundingBox;
+
+			// Check if the ray intersects with the bounding box
+			float t = box.intersect(rayOrigin, rayDirection, tMin, tMax);
+			if (t != -1.0f) {
+				// If the ray intersects, calculate the intersection point and normal vector
+				intersectionPoint = rayOrigin.add(Vector.multiplyVector(rayDirection, t));
+				normalVector = box.getNormal(rayDirection);
+
+				// Return the intersection point and normal vector
+				return intersectionPoint;
+			}
+		}
+
+		// If no intersection is found, return null
+		return null;
+	}
+
 }
