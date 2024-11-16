@@ -2,14 +2,31 @@ package me.joepeterson.Timeless.entities;
 
 import me.joepeterson.Timeless.engine.BoundingBox;
 import me.joepeterson.Timeless.engine.entity.LivingEntity;
+import me.joepeterson.Timeless.engine.inventory.Item;
 import me.joepeterson.Timeless.engine.util.Vector;
 import org.joml.Vector3f;
+
+import java.util.ArrayList;
 
 public class Player extends LivingEntity {
 
 	private float scale = 1.0f;
 
 	public boolean sprinting = false;
+
+	private ArrayList<Item> inventory = new ArrayList<Item>();
+
+	public ArrayList<Item> getInventory() {
+		return inventory;
+	}
+
+	public void addItem(Item item) {
+		inventory.add(item);
+	}
+
+	public boolean removeItem(Item item) {
+		return inventory.remove(item);
+	}
 
 	public void setScale(float scale) {
 		this.scale = scale;
