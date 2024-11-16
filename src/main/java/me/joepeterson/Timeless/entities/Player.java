@@ -14,20 +14,6 @@ public class Player extends LivingEntity {
 
 	public boolean sprinting = false;
 
-	private ArrayList<Item> inventory = new ArrayList<Item>();
-
-	public ArrayList<Item> getInventory() {
-		return inventory;
-	}
-
-	public void addItem(Item item) {
-		inventory.add(item);
-	}
-
-	public boolean removeItem(Item item) {
-		return inventory.remove(item);
-	}
-
 	public void setScale(float scale) {
 		this.scale = scale;
 	}
