@@ -17,10 +17,10 @@ public class HUDMesh extends BaseMesh {
 	};
 
 	static float[] texCoords = new float[]{
-			-1.0f, -1.0f,
-			-1.0f, 1.0f,
+			0.0f, 0.0f,
+			0.0f, 1.0f,
 			1.0f, 1.0f,
-			1.0f, -1.0f,
+			1.0f, 0.0f,
 	};
 
 	public HUDMesh(Texture texture) {
