@@ -25,6 +25,10 @@ public class HUDMesh extends BaseMesh {
 	};
 
 	public HUDMesh(Texture texture, Vector2f position, Vector2f scale) {
+		super(getVertices(position, scale), texCoords, indices, texture);
+	}
+
+	public static float[] getVertices(Vector2f position, Vector2f scale) {
 		float[] vertices = new float[initVertices.length];
 
 		for(int i = 0; i < initVertices.length / 3; i++) {
@@ -43,6 +47,6 @@ public class HUDMesh extends BaseMesh {
 			vertices[i * 3 + 2] = 0.0f;
 		}
 
-		super(vertices, texCoords, indices, texture);
+		return vertices;
 	}
 }
