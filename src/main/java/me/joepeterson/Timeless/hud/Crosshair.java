@@ -17,6 +17,4 @@ public class Crosshair extends HUDItem {
 
 		super(texture, position, scale);
 	}
-
-	public void updatePosition() {}
 }

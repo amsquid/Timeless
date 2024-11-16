@@ -10,12 +10,6 @@ public class HUD {
 
 	public HUD() { }
 
-	public void updateHUD(Camera camera) {
-		for(HUDItem hudItem : hudItems) {
-			hudItem.updatePosition(camera);
-		}
-	}
-
 	public void addHUDItem(HUDItem item) {
 		hudItems.add(item);
 	}
