@@ -5,6 +5,7 @@ import me.joepeterson.Timeless.engine.entity.LivingEntity;
 import me.joepeterson.Timeless.engine.inventory.Inventory;
 import me.joepeterson.Timeless.engine.inventory.Item;
 import me.joepeterson.Timeless.engine.util.Vector;
+import me.joepeterson.Timeless.engine.world.World;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
@@ -37,5 +38,25 @@ public class Player extends LivingEntity {
 		BoundingBox boundingBox = new BoundingBox(getMin(), getMax());
 
 		this.setBoundingBox(boundingBox);
+	}
+
+	public void moveAndCollide(Vector3f velocity, World world) {
+		// Future Velocities
+		Vector3f futureForwardVelocity = new Vector3f(0.0f, 0.0f, velocity.z);
+		Vector3f futureUpVelocity = new Vector3f(0.0f, velocity.y, 0.0f);
+		Vector3f futureRightVelocity = new Vector3f(velocity.x, 0.0f, 0.0f);
+
+		// Doing collision checks for each of the future velocities
+		boolean futureForwardCollision = checkBlockCollisions(futureForwardVelocity, world.getBlocks());
+		boolean futureUpCollision = checkBlockCollisions(futureUpVelocity, world.getBlocks());
+		boolean futureRightCollision = checkBlockCollisions(futureRightVelocity, world.getBlocks());
+
+		// Stopping the player in the direction they're colliding with
+		if(futureForwardCollision) velocity = new Vector3f(velocity.x, velocity.y, 0.0f);
+		if(futureUpCollision) velocity = new Vector3f(velocity.x, 0.0f, velocity.z);
+		if(futureRightCollision) velocity = new Vector3f(0.0f, velocity.y, velocity.z);;
+
+		// Updating velocities based on collisions
+		setVelocity(velocity.x, velocity.y, velocity.z);
 	}
 }
