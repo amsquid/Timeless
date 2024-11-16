@@ -10,7 +10,7 @@ public class Item {
 	private final double hardness;
 	private final boolean isBreakable;
 
-	public Item(ItemType itemType, int itemStackSize, String name, Texture texture, double hardness, boolean isBreakable) {
+	public Item(String name, ItemType itemType, Texture texture, int itemStackSize, double hardness, boolean isBreakable) {
 		this.itemType = itemType;
 		this.itemStackSize = itemStackSize;
 		this.name = name;
