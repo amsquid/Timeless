@@ -1,13 +1,19 @@
 package me.joepeterson.Timeless.engine.hud;
 
+import me.joepeterson.Timeless.engine.entity.Camera;
+
 import java.util.ArrayList;
 
 public class HUD {
 
 	private ArrayList<HUDItem> hudItems = new ArrayList<>();
 
-	public HUD() {
+	public HUD() { }
 
+	public void updateHUD(Camera camera) {
+		for(HUDItem hudItem : hudItems) {
+			hudItem.updatePosition(camera);
+		}
 	}
 
 	public void addHUDItem(HUDItem item) {

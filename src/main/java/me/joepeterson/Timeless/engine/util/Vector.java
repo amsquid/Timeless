@@ -1,5 +1,7 @@
 package me.joepeterson.Timeless.engine.util;
 
+import org.joml.Vector2f;
+import org.joml.Vector2i;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 
@@ -47,5 +49,13 @@ public class Vector {
 
 	public static Vector3i multiplyVector(Vector3i a, int b) {
 		return new Vector3i(a.x * b, a.y * b, a.z * b);
+	}
+
+	public static Vector2f multiplyVector(Vector2f a, float b) {
+		return new Vector2f(a.x * b, a.y * b);
+	}
+
+	public static Vector2i multiplyVector(Vector2i a, int b) {
+		return new Vector2i(a.x * b, a.y * b);
 	}
 }
