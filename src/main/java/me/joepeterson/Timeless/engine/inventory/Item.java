@@ -7,15 +7,13 @@ public class Item {
 	private final int itemStackSize;
 	private final String name;
 	private final Texture texture;
-	private final double hardness;
 	private final boolean isBreakable;
 
-	public Item(ItemType itemType, int itemStackSize, String name, Texture texture, double hardness, boolean isBreakable) {
+	public Item(ItemType itemType, int itemStackSize, String name, Texture texture, boolean isBreakable) {
 		this.itemType = itemType;
 		this.itemStackSize = itemStackSize;
 		this.name = name;
 		this.texture = texture;
-		this.hardness = hardness;
 		this.isBreakable = isBreakable;
 	}
 
@@ -33,10 +31,6 @@ public class Item {
 
 	public Texture getTexture() {
 		return texture;
-	}
-
-	public double getHardness() {
-		return hardness;
 	}
 
 	public boolean isBreakable() {
