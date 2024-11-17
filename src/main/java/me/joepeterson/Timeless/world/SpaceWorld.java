@@ -1,14 +1,12 @@
-package me.joepeterson.Timeless.worlds;
+package me.joepeterson.Timeless.world;
 
 import me.joepeterson.Timeless.blocks.RockBlock;
-import me.joepeterson.Timeless.engine.entity.Entity;
 import me.joepeterson.Timeless.engine.entity.MeshEntity;
 import me.joepeterson.Timeless.engine.mesh.ModelMesh;
 import me.joepeterson.Timeless.engine.texture.Texture;
 import me.joepeterson.Timeless.engine.world.World;
 import org.joml.Vector3i;
 
-import java.io.IOException;
 import java.util.Random;
 
 public class SpaceWorld extends World {

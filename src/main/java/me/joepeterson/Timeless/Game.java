@@ -6,12 +6,11 @@ import me.joepeterson.Timeless.engine.entity.Camera;
 import me.joepeterson.Timeless.engine.entity.MeshEntity;
 import me.joepeterson.Timeless.engine.hud.HUD;
 import me.joepeterson.Timeless.engine.hud.HUDItem;
-import me.joepeterson.Timeless.engine.texture.Texture;
 import me.joepeterson.Timeless.engine.util.Vector;
 import me.joepeterson.Timeless.engine.world.World;
-import me.joepeterson.Timeless.entities.Player;
+import me.joepeterson.Timeless.entity.Player;
 import me.joepeterson.Timeless.hud.Crosshair;
-import me.joepeterson.Timeless.worlds.SpaceWorld;
+import me.joepeterson.Timeless.world.SpaceWorld;
 import org.joml.Vector2d;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
@@ -217,21 +216,17 @@ public class Game implements IGameLogic {
 		}
 
 		if(window.isMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT) && !brokenBlock) {
-			Vector3f lookingBlockPosition = camera.rayCastBlock(world, 5);
-			System.out.println(lookingBlockPosition);
+			Block lookingBlock = camera.rayCastBlock(world, 5);
 
-			if(lookingBlockPosition != null) {
-				Vector3i blockPosition = Vector.toVector3i(lookingBlockPosition);
-				Block lookingBlock = world.getBlocks().get(blockPosition);
+			if(lookingBlock != null) {
+				System.out.println(lookingBlock.position);
 
-				if (lookingBlock != null) {
-					if (!world.deleteBlock(lookingBlock.position)) System.out.println("Couldn't delete block");
+				if (!world.deleteBlock(lookingBlock.position)) System.out.println("Couldn't delete block");
 
-					world.fixFaces();
-				}
-
-				brokenBlock = true;
+				world.fixFaces();
 			}
+
+			brokenBlock = true;
 		}
 
 		if(window.isMouseButtonReleased(GLFW_MOUSE_BUTTON_LEFT)) {

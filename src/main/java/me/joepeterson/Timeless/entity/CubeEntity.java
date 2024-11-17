@@ -1,4 +1,4 @@
-package me.joepeterson.Timeless.entities;
+package me.joepeterson.Timeless.entity;
 
 import me.joepeterson.Timeless.engine.texture.Texture;
 import me.joepeterson.Timeless.engine.entity.MeshEntity;

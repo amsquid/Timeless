@@ -1,14 +1,11 @@
-package me.joepeterson.Timeless.entities;
+package me.joepeterson.Timeless.entity;
 
 import me.joepeterson.Timeless.engine.BoundingBox;
 import me.joepeterson.Timeless.engine.entity.LivingEntity;
 import me.joepeterson.Timeless.engine.inventory.Inventory;
-import me.joepeterson.Timeless.engine.inventory.Item;
 import me.joepeterson.Timeless.engine.util.Vector;
 import me.joepeterson.Timeless.engine.world.World;
 import org.joml.Vector3f;
-
-import java.util.ArrayList;
 
 public class Player extends LivingEntity {
 
