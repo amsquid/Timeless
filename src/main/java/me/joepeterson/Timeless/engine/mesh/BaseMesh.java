@@ -22,6 +22,8 @@ public class BaseMesh {
 		updateBuffers(false, vertices, texCoords, indices, texture);
 	}
 
+	public BaseMesh() { }
+
 	public void updateBuffers(boolean cleanup, float[] vertices, float[] texCoords, int[] indices, Texture texture) {
 		if(cleanup) this.cleanup();
 

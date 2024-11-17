@@ -1,15 +1,31 @@
 package me.joepeterson.Timeless.worlds;
 
 import me.joepeterson.Timeless.blocks.RockBlock;
+import me.joepeterson.Timeless.engine.entity.Entity;
+import me.joepeterson.Timeless.engine.entity.MeshEntity;
+import me.joepeterson.Timeless.engine.mesh.ModelMesh;
+import me.joepeterson.Timeless.engine.texture.Texture;
 import me.joepeterson.Timeless.engine.world.World;
 import org.joml.Vector3i;
 
+import java.io.IOException;
 import java.util.Random;
 
 public class SpaceWorld extends World {
 
 	public void generateWorld(long seed) {
 		Random random = new Random(seed);
+
+		try {
+			Texture texture = new Texture("textures/block/blue_rock.png");
+			ModelMesh modelMesh = new ModelMesh("models/test.dae", texture);
+
+			MeshEntity entity = new MeshEntity(modelMesh);
+
+			addEntity(entity);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 
 		for(int i = 0; i < 20; i++) {
 			createAsteroid(new Vector3i(random.nextInt(-50, 50), random.nextInt(-50, 50), random.nextInt(-50, 50)), random.nextInt(1, 5));
