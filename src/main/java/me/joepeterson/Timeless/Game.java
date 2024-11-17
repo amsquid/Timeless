@@ -219,8 +219,8 @@ public class Game implements IGameLogic {
 		if(window.isMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT) && !brokenBlock) {
 			Vector3f lookingBlockPosition = camera.rayCastBlock(world, 5);
 			System.out.println(lookingBlockPosition);
-			if(lookingBlockPosition != null) {
 
+			if(lookingBlockPosition != null) {
 				Vector3i blockPosition = Vector.toVector3i(lookingBlockPosition);
 				Block lookingBlock = world.getBlocks().get(blockPosition);
 
