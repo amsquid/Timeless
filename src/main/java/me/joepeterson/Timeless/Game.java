@@ -217,15 +217,21 @@ public class Game implements IGameLogic {
 		}
 
 		if(window.isMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT) && !brokenBlock) {
-			Block lookingBlock = camera.rayMarchBlock(world, 5);
+			Vector3f lookingBlockPosition = camera.rayCastBlock(world, 5);
+			System.out.println(lookingBlockPosition);
+			if(lookingBlockPosition != null) {
 
-			if(lookingBlock != null) {
-				if(!world.deleteBlock(lookingBlock.position)) System.out.println("Couldn't delete block");
+				Vector3i blockPosition = Vector.toVector3i(lookingBlockPosition);
+				Block lookingBlock = world.getBlocks().get(blockPosition);
 
-				world.fixFaces();
+				if (lookingBlock != null) {
+					if (!world.deleteBlock(lookingBlock.position)) System.out.println("Couldn't delete block");
+
+					world.fixFaces();
+				}
+
+				brokenBlock = true;
 			}
-
-			brokenBlock = true;
 		}
 
 		if(window.isMouseButtonReleased(GLFW_MOUSE_BUTTON_LEFT)) {
