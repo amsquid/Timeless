@@ -58,4 +58,12 @@ public class Vector {
 	public static Vector2i multiplyVector(Vector2i a, int b) {
 		return new Vector2i(a.x * b, a.y * b);
 	}
+
+	public static float distance(Vector3f a, Vector3f b) {
+		return (float) Math.sqrt(
+				Math.pow(a.x - b.x, 2) +
+				Math.pow(a.x - b.x, 2) +
+				Math.pow(a.x - b.x, 2)
+		);
+	}
 }
