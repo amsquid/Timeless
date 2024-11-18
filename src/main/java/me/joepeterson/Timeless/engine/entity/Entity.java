@@ -3,40 +3,43 @@ package me.joepeterson.Timeless.engine.entity;
 import me.joepeterson.Timeless.engine.BoundingBox;
 import me.joepeterson.Timeless.engine.block.Block;
 import me.joepeterson.Timeless.engine.util.Vector;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 import java.util.Map;
 
 public class Entity {
-	private final Vector3f position;
-	private final Vector3f velocity;
+	private Vector3f position;
+	private Vector3f velocity;
 	private final Vector3f rotation;
 
 	private Vector3f min = new Vector3f();
 	private Vector3f max = new Vector3f();
 
-	private BoundingBox entityBox;
+	private BoundingBox boundingBox;
 
 	public Entity() {
 		position = new Vector3f(0.0f, 0.0f, 0.0f);
 		velocity = new Vector3f(0.0f, 0.0f, 0.0f);
 		rotation = new Vector3f(0.0f, 0.0f, 0.0f);
+		
+		this.boundingBox = new BoundingBox(new Vector3f(0.0f, 0.0f, 0.0f), new Vector3f(0.0f, 0.0f, 0.0f));
 	}
 
 	public BoundingBox getBoundingBox() {
-		return entityBox;
+		return boundingBox;
 	}
 
 	public BoundingBox getBoundingBoxWithOffset(Vector3f offset) {
-		Vector3f min = Vector.addVectors(entityBox.getMin(), offset);
-		Vector3f max = Vector.addVectors(entityBox.getMax(), offset);
+		Vector3f min = Vector.addVectors(boundingBox.getMin(), offset);
+		Vector3f max = Vector.addVectors(boundingBox.getMax(), offset);
 
 		return new BoundingBox(min, max);
 	}
 
 	public void setBoundingBox(BoundingBox boundingBox) {
-		this.entityBox = boundingBox;
+		this.boundingBox = boundingBox;
 	}
 
 	public void setMin(Vector3f min) {
@@ -65,6 +68,10 @@ public class Entity {
 		this.position.z = z;
 	}
 
+	public void setPosition(Vector3f position) {
+		this.position = position;
+	}
+
 	public Vector3f getVelocity() {
 		return velocity;
 	}
@@ -74,11 +81,25 @@ public class Entity {
 		this.velocity.y = y;
 		this.velocity.z = z;
 	}
+	
+	public void setVelocity(Vector3f velocity) {
+		this.velocity = velocity;
+	}
 
 	public void accelerate(float x, float y, float z) {
 		this.velocity.x += x;
 		this.velocity.y += y;
 		this.velocity.z += z;
+	}
+
+	public Vector3f getForwardVector() {
+		Vector2f rotation = new Vector2f(getRotation().x, getRotation().y);
+
+		return new Vector3f(
+				(float) Math.cos(rotation.y) * (float) Math.sin(rotation.x),
+				(float) Math.sin(rotation.y) * (float) Math.sin(rotation.x),
+				(float) Math.cos(rotation.x)
+		);
 	}
 
 	public Vector3f getVelocityForward(float x, float y, float z) {
