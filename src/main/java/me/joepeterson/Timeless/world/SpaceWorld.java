@@ -15,7 +15,7 @@ public class SpaceWorld extends World {
 		Random random = new Random(seed);
 
 		try {
-			Texture texture = new Texture("textures/block/blue_rock.png");
+			Texture texture = new Texture("textures/model/blue_rock.png");
 			ModelMesh modelMesh = new ModelMesh("models/test.dae", texture);
 
 			MeshEntity entity = new MeshEntity(modelMesh);
