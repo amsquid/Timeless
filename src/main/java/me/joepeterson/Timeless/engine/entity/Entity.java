@@ -24,7 +24,7 @@ public class Entity {
 		velocity = new Vector3f(0.0f, 0.0f, 0.0f);
 		rotation = new Vector3f(0.0f, 0.0f, 0.0f);
 		
-		this.boundingBox = new BoundingBox(new Vector3f(0.0f, 0.0f, 0.0f), new Vector3f(0.0f, 0.0f, 0.0f));
+		this.boundingBox = new BoundingBox(new Vector3f(0.0f, 0.0f, 0.0f), new Vector3f());
 	}
 
 	public BoundingBox getBoundingBox() {
@@ -69,7 +69,7 @@ public class Entity {
 	}
 
 	public void setPosition(Vector3f position) {
-		this.position = position;
+		this.position = new Vector3f(position);
 	}
 
 	public Vector3f getVelocity() {
@@ -83,7 +83,7 @@ public class Entity {
 	}
 	
 	public void setVelocity(Vector3f velocity) {
-		this.velocity = velocity;
+		this.velocity = new Vector3f(velocity);
 	}
 
 	public void accelerate(float x, float y, float z) {
@@ -93,12 +93,15 @@ public class Entity {
 	}
 
 	public Vector3f getForwardVector() {
-		Vector2f rotation = new Vector2f(getRotation().x, getRotation().y);
+		float yaw   = (float) Math.toRadians(rotation.y - 90);
+		float pitch = (float) Math.toRadians(rotation.x);
+
+		float radius = (float) Math.cos(pitch);
 
 		return new Vector3f(
-				(float) Math.cos(rotation.y) * (float) Math.sin(rotation.x),
-				(float) Math.sin(rotation.y) * (float) Math.sin(rotation.x),
-				(float) Math.cos(rotation.x)
+				radius * (float) Math.cos(yaw),
+				(float) Math.sin(-pitch),
+				radius * (float) Math.sin(yaw)
 		);
 	}
 

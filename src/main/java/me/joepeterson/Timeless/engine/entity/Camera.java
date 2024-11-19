@@ -3,8 +3,11 @@ package me.joepeterson.Timeless.engine.entity;
 import me.joepeterson.Timeless.engine.BoundingBox;
 import me.joepeterson.Timeless.engine.Window;
 import me.joepeterson.Timeless.engine.block.Block;
+import me.joepeterson.Timeless.engine.mesh.ModelMesh;
+import me.joepeterson.Timeless.engine.texture.Texture;
 import me.joepeterson.Timeless.engine.util.Vector;
 import me.joepeterson.Timeless.engine.world.World;
+import me.joepeterson.Timeless.entity.Player;
 import org.joml.*;
 
 import java.lang.Math;
@@ -153,35 +156,28 @@ public class Camera extends Entity {
 		return null;
 	}
 
-	public Vector3f rayCastBlock(World world, int maxDistance) {
-		Vector3f rayOrigin = getPosition();
-		Vector3f rayDirection = getViewMatrix().positiveZ(new Vector3f(getRotation().x, getRotation().y, getRotation().z)).negate();
+	/*
+		Raycast detection via a "raycasting" method
 
-		float tMin = Z_NEAR; // minimum distance to consider an intersection
-		float tMax = maxDistance; // maximum distance to consider an intersection
+		It shoots out an entity from the camera, and wherever that entity collides is where a block is.
+		The function promptly returns the position of the collision, which can be used to get the block's position, or anything else needed
+	 */
+	public Vector3f getLookingPosition(World world, int maxDistance, float moveAccuracy) {
+		Entity testingEntity = new Entity();
 
-		Vector3f intersectionPoint = null;
-		Vector3f normalVector = null;
+		Vector3f velocity = getForwardVector().mul(moveAccuracy);
 
-		// Iterate through the blocks in the scene
-		for (Block block : world.getBlocks().values()) {
-			// Get the bounding box of the block
-			BoundingBox box = block.boundingBox;
+		testingEntity.setPosition(getPosition());
+		testingEntity.setVelocity(velocity);
 
-			// Check if the ray intersects with the bounding box
-			float t = box.intersect(rayOrigin, rayDirection, tMin, tMax);
-			if (t != -1.0f) {
-				// If the ray intersects, calculate the intersection point and normal vector
-				intersectionPoint = rayOrigin.add(Vector.multiplyVector(rayDirection, t));
-				normalVector = box.getNormal(rayDirection);
+		while(true) {
+			testingEntity.move();
 
-				// Return the intersection point and normal vector
-				return intersectionPoint;
-			}
+			if(world.getBlocks().get(Vector.toVector3iFloor(testingEntity.getPosition())) != null) break;
+			if(Vector.distance(getPosition(), testingEntity.getPosition()) >= maxDistance) break;
 		}
 
-		// If no intersection is found, return null
-		return null;
+		return testingEntity.getPosition();
 	}
 
 }

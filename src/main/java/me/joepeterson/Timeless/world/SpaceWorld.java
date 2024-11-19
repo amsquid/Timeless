@@ -20,7 +20,7 @@ public class SpaceWorld extends World {
 
 			MeshEntity entity = new MeshEntity(modelMesh);
 
-			addEntity(entity);
+			//addEntity(entity);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

@@ -6,6 +6,8 @@ import me.joepeterson.Timeless.engine.entity.Camera;
 import me.joepeterson.Timeless.engine.entity.MeshEntity;
 import me.joepeterson.Timeless.engine.hud.HUD;
 import me.joepeterson.Timeless.engine.hud.HUDItem;
+import me.joepeterson.Timeless.engine.mesh.ModelMesh;
+import me.joepeterson.Timeless.engine.texture.Texture;
 import me.joepeterson.Timeless.engine.util.Vector;
 import me.joepeterson.Timeless.engine.world.World;
 import me.joepeterson.Timeless.entity.Player;
@@ -31,6 +33,8 @@ public class Game implements IGameLogic {
 	Window window;
 
 	World world;
+
+	MeshEntity debugEntity;
 
 	private Vector2d lastMousePosition = new Vector2d();
 	public float mouseSensitivity = 5.0f;
@@ -69,6 +73,11 @@ public class Game implements IGameLogic {
 		System.out.println("Generated world");
 
 		camera = new Camera(window);
+
+		ModelMesh modelMesh = new ModelMesh("models/testing_entity.dae", new Texture("textures/model/blue_rock.png"));
+		debugEntity = new MeshEntity(modelMesh);
+
+		world.addEntity(debugEntity);
 
 		// HUD
 		try {
@@ -215,12 +224,14 @@ public class Game implements IGameLogic {
 			glfwSetInputMode(window.windowHandle, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		}
 
+		Vector3f lookingPosition = camera.getLookingPosition(world, 5, .1f);
+		debugEntity.setPosition(lookingPosition);
+
 		if(window.isMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT) && !brokenBlock) {
-			Block lookingBlock = camera.rayCastBlock(world, 5);
+			Vector3i lookingBlockPosition = Vector.toVector3iFloor(lookingPosition);
+			Block lookingBlock = world.getBlocks().get(lookingBlockPosition);
 
 			if(lookingBlock != null) {
-				System.out.println(lookingBlock.position);
-
 				if (!world.deleteBlock(lookingBlock.position)) System.out.println("Couldn't delete block");
 
 				world.fixFaces();
