@@ -20,11 +20,11 @@ public class Entity {
 	private BoundingBox boundingBox;
 
 	public Entity() {
-		position = new Vector3f(0.0f, 0.0f, 0.0f);
-		velocity = new Vector3f(0.0f, 0.0f, 0.0f);
-		rotation = new Vector3f(0.0f, 0.0f, 0.0f);
+		position = new Vector3f();
+		velocity = new Vector3f();
+		rotation = new Vector3f();
 		
-		this.boundingBox = new BoundingBox(new Vector3f(0.0f, 0.0f, 0.0f), new Vector3f());
+		this.boundingBox = new BoundingBox(new Vector3f(), new Vector3f());
 	}
 
 	public BoundingBox getBoundingBox() {
