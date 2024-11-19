@@ -7,7 +7,7 @@ out vec4 fragColor;
 
 uniform sampler2D tex;
 
-float lightEnd = 30.0f;
+float lightEnd = 10.0f;
 
 vec4 darkColor = vec4(1.0, 1.0, 1.0, 1.0);
 

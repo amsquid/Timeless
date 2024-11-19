@@ -25,8 +25,8 @@ public class SpaceWorld extends World {
 			throw new RuntimeException(e);
 		}
 
-		for(int i = 0; i < 20; i++) {
-			createAsteroid(new Vector3i(random.nextInt(-50, 50), random.nextInt(-50, 50), random.nextInt(-50, 50)), random.nextInt(1, 5));
+		for(int i = 0; i < 500; i++) {
+			createAsteroid(new Vector3i(random.nextInt(-100, 100), random.nextInt(-100, 100), random.nextInt(-100, 100)), random.nextInt(1, 5));
 		}
 
 		fixFaces();

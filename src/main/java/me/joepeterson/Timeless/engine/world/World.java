@@ -9,10 +9,12 @@ import org.joml.Vector3i;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class World {
 
 	private Map<Vector3i, Block> blocks = new HashMap<>();
+	private Map<Vector3i, Chunk> chunks = new HashMap<>();
 	private ArrayList<MeshEntity> entities = new ArrayList<>();
 
 	public float gravity = 0.0f;
@@ -47,27 +49,39 @@ public class World {
 
 	public void fixFaces() {
 		for(Vector3i position : blocks.keySet()) {
-			Block block = blocks.get(position);
-			CubeMesh mesh = block.mesh;
-
-			mesh.resetIndicesNoUpdate();
-
-			// TOP
-			if(blocks.containsKey(new Vector3i(block.position.x, block.position.y + 1, block.position.z))) mesh.deleteCubeIndices(BlockFace.TOP);
-			// BOTTOM
-			if(blocks.containsKey(new Vector3i(block.position.x, block.position.y - 1, block.position.z))) mesh.deleteCubeIndices(BlockFace.BOTTOM);
-
-			// RIGHT
-			if(blocks.containsKey(new Vector3i(block.position.x + 1, block.position.y, block.position.z))) mesh.deleteCubeIndices(BlockFace.RIGHT);
-			// LEFT
-			if(blocks.containsKey(new Vector3i(block.position.x - 1, block.position.y, block.position.z))) mesh.deleteCubeIndices(BlockFace.LEFT);
-
-			// FRONT
-			if(blocks.containsKey(new Vector3i(block.position.x, block.position.y, block.position.z + 1))) mesh.deleteCubeIndices(BlockFace.FRONT);
-			// BACK
-			if(blocks.containsKey(new Vector3i(block.position.x, block.position.y, block.position.z - 1))) mesh.deleteCubeIndices(BlockFace.BACK);
-
-			block.mesh.updateIndices();
+			fixFace(position);
 		}
+	}
+
+	public void fixFaces(Set<Vector3i> positions) {
+		for(Vector3i position : positions) {
+			if(!blocks.containsKey(position)) continue;
+
+			fixFace(position);
+		}
+	}
+
+	public void fixFace(Vector3i position) {
+		Block block = blocks.get(position);
+		CubeMesh mesh = block.mesh;
+
+		mesh.resetIndicesNoUpdate();
+
+		// TOP
+		if(blocks.containsKey(new Vector3i(block.position.x, block.position.y + 1, block.position.z))) mesh.deleteCubeIndices(BlockFace.TOP);
+		// BOTTOM
+		if(blocks.containsKey(new Vector3i(block.position.x, block.position.y - 1, block.position.z))) mesh.deleteCubeIndices(BlockFace.BOTTOM);
+
+		// RIGHT
+		if(blocks.containsKey(new Vector3i(block.position.x + 1, block.position.y, block.position.z))) mesh.deleteCubeIndices(BlockFace.RIGHT);
+		// LEFT
+		if(blocks.containsKey(new Vector3i(block.position.x - 1, block.position.y, block.position.z))) mesh.deleteCubeIndices(BlockFace.LEFT);
+
+		// FRONT
+		if(blocks.containsKey(new Vector3i(block.position.x, block.position.y, block.position.z + 1))) mesh.deleteCubeIndices(BlockFace.FRONT);
+		// BACK
+		if(blocks.containsKey(new Vector3i(block.position.x, block.position.y, block.position.z - 1))) mesh.deleteCubeIndices(BlockFace.BACK);
+
+		block.mesh.updateIndices();
 	}
 }

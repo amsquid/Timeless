@@ -18,6 +18,8 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -35,6 +37,8 @@ public class Game implements IGameLogic {
 	World world;
 
 	MeshEntity debugEntity;
+
+	private Map<Vector3i, Block> seenBlocks = new HashMap<>();
 
 	private Vector2d lastMousePosition = new Vector2d();
 	public float mouseSensitivity = 5.0f;
@@ -117,6 +121,9 @@ public class Game implements IGameLogic {
 		camera.setRotation(xRotClamp, camera.getRotation().y, camera.getRotation().z);
 
 		x += 0.05f;
+
+		// Debug
+		System.out.println(dt);
 	}
 
 	@Override
@@ -132,10 +139,21 @@ public class Game implements IGameLogic {
 		//renderer.render(entity, camera);
 
 		try {
-			for(Vector3i position : world.getBlocks().keySet()) {
-				Block block = world.getBlocks().get(position);
+			seenBlocks.clear();
 
-				if(block.mesh.visible) renderer.render(block, camera);
+			for(Vector3i position : world.getBlocks().keySet()) {
+				float distance = Vector.distance(Vector.toVector3f(position), player.getPosition());
+				//float distance = 0.0f;
+
+				if(distance <= 30.f) {
+					Block block = world.getBlocks().get(position);
+
+					if(block.mesh.visible) {
+						seenBlocks.put(position, block);
+
+						renderer.render(block, camera);
+					}
+				}
 			}
 
 			for(MeshEntity entity : world.getEntities()) {
@@ -234,7 +252,7 @@ public class Game implements IGameLogic {
 			if(lookingBlock != null) {
 				if (!world.deleteBlock(lookingBlock.position)) System.out.println("Couldn't delete block");
 
-				world.fixFaces();
+				world.fixFaces(seenBlocks.keySet());
 			}
 
 			brokenBlock = true;

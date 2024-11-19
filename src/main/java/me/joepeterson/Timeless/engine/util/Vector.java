@@ -60,14 +60,10 @@ public class Vector {
 	}
 
 	public static float distance(Vector3f a, Vector3f b) {
-		float distance = (float) Math.sqrt(
+		return (float) Math.sqrt(
 				Math.pow(a.x - b.x, 2) +
 				Math.pow(a.y - b.y, 2) +
 				Math.pow(a.z - b.z, 2)
 		);
-
-		System.out.println(a + " " + b + " | " + distance);
-
-		return distance;
 	}
 }
