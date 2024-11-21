@@ -20,6 +20,8 @@ public class SpaceWorld extends World {
 
 		for(int i = 0; i < 500; i++) {
 			returnBlocks.putAll(createAsteroid(new Vector3i(random.nextInt(-100, 100), random.nextInt(-100, 100), random.nextInt(-100, 100)), random.nextInt(1, 5)));
+
+			System.out.println(returnBlocks);
 		}
 
 		return returnBlocks;

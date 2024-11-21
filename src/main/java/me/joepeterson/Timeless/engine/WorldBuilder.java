@@ -1,9 +1,12 @@
 package me.joepeterson.Timeless.engine;
 
+import me.joepeterson.Timeless.engine.block.Block;
 import me.joepeterson.Timeless.engine.world.World;
 import org.joml.Vector3i;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
@@ -53,6 +56,6 @@ public class WorldBuilder implements Runnable {
 	@Override
 	public void run() {
 		blocksGenerated = world.generateWorld(seed);
-		this.generatedWorld = true;
+		this.generatedWorld = !Objects.equals(blocksGenerated, new HashMap<Vector3i, Integer>());
 	}
 }

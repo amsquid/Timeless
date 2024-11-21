@@ -121,6 +121,8 @@ public class Game implements IGameLogic {
 	@Override
 	public void update(float dt) {
 		// World Generation Check
+		System.out.println(worldBuilder.generatedWorld);
+
 		if(worldBuilder.generatedWorld && scene == 0) {
 			try {
 				world.loadWorld(worldBuilder.blocksGenerated, blocksDictionary);
