@@ -16,6 +16,8 @@ public class Block {
 
 	public final BoundingBox boundingBox;
 
+	public static int id = 0;
+
 	public Block(Vector3i position, Texture texture) {
 		mesh = new CubeMesh(texture);
 

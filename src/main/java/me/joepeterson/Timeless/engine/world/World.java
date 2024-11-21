@@ -6,6 +6,7 @@ import me.joepeterson.Timeless.engine.entity.MeshEntity;
 import me.joepeterson.Timeless.engine.mesh.CubeMesh;
 import org.joml.Vector3i;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,7 +46,18 @@ public class World {
 		return entities;
 	}
 
-	public void generateWorld(long seed) { }
+	public Map<Vector3i, Integer> generateWorld(long seed) {
+		return new HashMap<>();
+	}
+
+	public void loadWorld(Map<Vector3i, Integer> blocks, Class<?>[] blockDictionary) throws InvocationTargetException, InstantiationException, IllegalAccessException {
+		for(Vector3i position : blocks.keySet()) {
+			int id = blocks.get(position);
+			Block block = (Block) blockDictionary[id].getDeclaredConstructors()[0].newInstance(position);
+
+			addBlock(block);
+		}
+	}
 
 	public void fixFaces() {
 		for(Vector3i position : blocks.keySet()) {

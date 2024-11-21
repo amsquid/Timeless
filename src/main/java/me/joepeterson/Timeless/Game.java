@@ -1,9 +1,11 @@
 package me.joepeterson.Timeless;
 
+import me.joepeterson.Timeless.blocks.RockBlock;
 import me.joepeterson.Timeless.engine.*;
 import me.joepeterson.Timeless.engine.block.Block;
 import me.joepeterson.Timeless.engine.entity.Camera;
 import me.joepeterson.Timeless.engine.entity.MeshEntity;
+import me.joepeterson.Timeless.engine.hud.FullscreenHUDItem;
 import me.joepeterson.Timeless.engine.hud.HUD;
 import me.joepeterson.Timeless.engine.hud.HUDItem;
 import me.joepeterson.Timeless.engine.mesh.ModelMesh;
@@ -30,13 +32,21 @@ public class Game implements IGameLogic {
 
 	Camera camera;
 	Player player;
-	HUD hud;
+	HUD gameHUD;
+	HUD loadingHUD;
+
+	HUD activeHUD;
 
 	Window window;
 
+	WorldBuilder worldBuilder;
 	World world;
 
 	MeshEntity debugEntity;
+
+	Class<?>[] blocksDictionary = new Class<?>[]{
+			RockBlock.class
+	};
 
 	private Map<Vector3i, Block> seenBlocks = new HashMap<>();
 
@@ -45,19 +55,21 @@ public class Game implements IGameLogic {
 
 	public boolean brokenBlock = false;
 
+	public boolean drawBlocks = false;
+
+	public int scene = 0;
+
 	float x = 0.0f;
 
 	public Game() {
 		renderer = new Renderer();
 		player = new Player(.1f);
-		hud = new HUD();
+		gameHUD = new HUD();
+		loadingHUD = new HUD();
 	}
 
 	@Override
 	public void init(Window window) throws Exception {
-		// Cursor
-		glfwSetInputMode(window.windowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
 		// Culling
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
@@ -71,26 +83,33 @@ public class Game implements IGameLogic {
 
 		window.update();
 
-		System.out.println("Generating world");
-		this.world = new SpaceWorld();
-		this.world.generateWorld(0L);
-		System.out.println("Generated world");
-
 		camera = new Camera(window);
 
-		ModelMesh modelMesh = new ModelMesh("models/testing_entity.dae", new Texture("textures/model/blue_rock.png"));
-		debugEntity = new MeshEntity(modelMesh);
-
-		world.addEntity(debugEntity);
-
-		// HUD
+		// Loading HUD
 		try {
-			hud.addHUDItem(new Crosshair());
+			loadingHUD.addHUDItem(new FullscreenHUDItem(new Texture("textures/ui/loading_screen.png")));
+		} catch(IOException e) {
+			throw new RuntimeException(e);
+		}
+
+		// Game HUD
+		try {
+			gameHUD.addHUDItem(new Crosshair());
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 
 		renderer.init();
+
+		// Generating World
+		this.activeHUD = loadingHUD;
+
+		System.out.println("Generating world");
+
+		this.world = new SpaceWorld();
+
+		this.worldBuilder = new WorldBuilder(this.world, this.window);
+		this.worldBuilder.generateWorld();
 	}
 
 	@Override
@@ -101,29 +120,53 @@ public class Game implements IGameLogic {
 
 	@Override
 	public void update(float dt) {
-		// Player movement
-		Vector3f playerPos = player.getPosition();
+		// World Generation Check
+		if(worldBuilder.generatedWorld && scene == 0) {
+			try {
+				world.loadWorld(worldBuilder.blocksGenerated, blocksDictionary);
+				scene = 1;
 
-		camera.setPosition(playerPos.x, playerPos.y + 1.0f, playerPos.z);
-		player.setRotation(0.0f, camera.getRotation().y, camera.getRotation().z);
+				glfwSetInputMode(window.windowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-		player.move();
+				System.out.println("Generated World");
 
-		// Camera rotation
-		Vector2d mousePosNormalized = new Vector2d(window.getMousePos().x / window.width - .5d, window.getMousePos().y / window.height - .5d);
-		Vector2d mouseDelta = new Vector2d(mousePosNormalized.x - lastMousePosition.x, mousePosNormalized.y - lastMousePosition.y);
-		lastMousePosition = mousePosNormalized;
+				ModelMesh modelMesh = new ModelMesh("models/testing_entity.dae", new Texture("textures/model/blue_rock.png"));
+				debugEntity = new MeshEntity(modelMesh);
 
-		camera.rotate((float) mouseDelta.y * dt * mouseSensitivity, (float) mouseDelta.x * dt * mouseSensitivity, 0.0f);
+				world.addEntity(debugEntity);
 
-		float xRotClamp = Math.clamp(camera.getRotation().x, -90.0f, 90.0f);
+				this.activeHUD = gameHUD;
 
-		camera.setRotation(xRotClamp, camera.getRotation().y, camera.getRotation().z);
+				scene = 1;
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
 
-		x += 0.05f;
+		if(scene == 1) {
+			// Player movement
+			Vector3f playerPos = player.getPosition();
 
-		// Debug
-		System.out.println(dt);
+			camera.setPosition(playerPos.x, playerPos.y + 1.0f, playerPos.z);
+			player.setRotation(0.0f, camera.getRotation().y, camera.getRotation().z);
+
+			player.move();
+
+			// Camera rotation
+			Vector2d mousePosNormalized = new Vector2d(window.getMousePos().x / window.width - .5d, window.getMousePos().y / window.height - .5d);
+			Vector2d mouseDelta = new Vector2d(mousePosNormalized.x - lastMousePosition.x, mousePosNormalized.y - lastMousePosition.y);
+			lastMousePosition = mousePosNormalized;
+
+			camera.rotate((float) mouseDelta.y * dt * mouseSensitivity, (float) mouseDelta.x * dt * mouseSensitivity, 0.0f);
+
+			float xRotClamp = Math.clamp(camera.getRotation().x, -90.0f, 90.0f);
+
+			camera.setRotation(xRotClamp, camera.getRotation().y, camera.getRotation().z);
+
+			// Debug
+			System.out.println(dt);
+		}
+
 	}
 
 	@Override
@@ -136,33 +179,38 @@ public class Game implements IGameLogic {
 			window.resized = false;
 		}
 
-		//renderer.render(entity, camera);
-
 		try {
-			seenBlocks.clear();
-
-			for(Vector3i position : world.getBlocks().keySet()) {
-				float distance = Vector.distance(Vector.toVector3f(position), player.getPosition());
-				//float distance = 0.0f;
-
-				if(distance <= 30.f) {
-					Block block = world.getBlocks().get(position);
-
-					if(block.mesh.visible) {
-						seenBlocks.put(position, block);
-
-						renderer.render(block, camera);
-					}
+			if(scene == 0) {
+				for(HUDItem item : loadingHUD.getHUDItems()) {
+					renderer.render(item, camera);
 				}
 			}
 
-			for(MeshEntity entity : world.getEntities()) {
-				renderer.render(entity, camera);
+			if(scene == 1) {
+				seenBlocks.clear();
+
+				for(Vector3i position : world.getBlocks().keySet()) {
+					float distance = Vector.distance(Vector.toVector3f(position), player.getPosition());
+					if(distance <= 30.f) {
+						Block block = world.getBlocks().get(position);
+
+						if(block.mesh.visible) {
+							seenBlocks.put(position, block);
+
+							renderer.render(block, camera);
+						}
+					}
+				}
+
+				for(MeshEntity entity : world.getEntities()) {
+					renderer.render(entity, camera);
+				}
+
+				for(HUDItem item : gameHUD.getHUDItems()) {
+					renderer.render(item, camera);
+				}
 			}
 
-			for(HUDItem item : hud.getHUDItems()) {
-				renderer.render(item, camera);
-			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -237,13 +285,15 @@ public class Game implements IGameLogic {
 	}
 
 	void mouseInput() {
+		if(this.scene != 1) return;
+
 		// Mouse Related inputs
 		if(window.isKeyPressed(GLFW_KEY_GRAVE_ACCENT)) { // Unlocking cursor
 			glfwSetInputMode(window.windowHandle, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		}
 
 		Vector3f lookingPosition = camera.getLookingPosition(world, 5, .1f);
-		debugEntity.setPosition(lookingPosition);
+		if(this.debugEntity != null) debugEntity.setPosition(lookingPosition);
 
 		if(window.isMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT) && !brokenBlock) {
 			Vector3i lookingBlockPosition = Vector.toVector3iFloor(lookingPosition);

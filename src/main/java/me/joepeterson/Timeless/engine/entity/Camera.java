@@ -1,13 +1,9 @@
 package me.joepeterson.Timeless.engine.entity;
 
-import me.joepeterson.Timeless.engine.BoundingBox;
 import me.joepeterson.Timeless.engine.Window;
 import me.joepeterson.Timeless.engine.block.Block;
-import me.joepeterson.Timeless.engine.mesh.ModelMesh;
-import me.joepeterson.Timeless.engine.texture.Texture;
 import me.joepeterson.Timeless.engine.util.Vector;
 import me.joepeterson.Timeless.engine.world.World;
-import me.joepeterson.Timeless.entity.Player;
 import org.joml.*;
 
 import java.lang.Math;
