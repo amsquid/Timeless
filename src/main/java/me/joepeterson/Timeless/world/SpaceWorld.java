@@ -18,8 +18,8 @@ public class SpaceWorld extends World {
 
 		Map<Vector3i, Integer> returnBlocks = new HashMap<>();
 
-		for(int i = 0; i < 500; i++) {
-			returnBlocks.putAll(createAsteroid(new Vector3i(random.nextInt(-100, 100), random.nextInt(-100, 100), random.nextInt(-100, 100)), random.nextInt(1, 5)));
+		for(int i = 0; i < 5; i++) {
+			returnBlocks.putAll(createAsteroid(new Vector3i(random.nextInt(-10, 10), random.nextInt(-10, 10), random.nextInt(-10, 10)), random.nextInt(1, 5)));
 		}
 
 		return returnBlocks;

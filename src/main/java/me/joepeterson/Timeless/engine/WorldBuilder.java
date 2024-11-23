@@ -22,8 +22,6 @@ public class WorldBuilder implements Runnable {
 	public boolean generatedWorld = false;
 	public Map<Vector3i, Integer> blocksGenerated;
 
-
-
 	private Thread generationThread;
 
 	private final Window window;
@@ -62,6 +60,6 @@ public class WorldBuilder implements Runnable {
 	@Override
 	public void run() {
 		blocksGenerated = world.generateWorld(seed);
-		this.generatedWorld = !Objects.equals(blocksGenerated, new HashMap<Vector3i, Integer>());
+		this.generatedWorld = true;
 	}
 }

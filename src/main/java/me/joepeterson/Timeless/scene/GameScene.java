@@ -48,6 +48,8 @@ public class GameScene extends WorldScene {
 
 	Window window;
 
+	float dt = 0.0f;
+
 	public GameScene(Renderer renderer) {
 		super(renderer);
 	}
@@ -71,7 +73,7 @@ public class GameScene extends WorldScene {
 		this.window = window;
 
 		camera = new Camera(window);
-		player = new Player(0.1f);
+		player = new Player(0.005f);
 
 		// Loading HUD
 		loadingHUD = new HUD();
@@ -133,6 +135,8 @@ public class GameScene extends WorldScene {
 	}
 
 	public void update(float dt) {
+		this.dt = dt;
+
 		if(worldBuilder.generatedWorld && loadingWorld) {
 			try {
 				world.loadWorld(worldBuilder.blocksGenerated, blocksDictionary);
@@ -163,17 +167,6 @@ public class GameScene extends WorldScene {
 		player.setRotation(0.0f, camera.getRotation().y, camera.getRotation().z);
 
 		player.move();
-
-		// Camera rotation
-		Vector2d mousePosNormalized = new Vector2d(window.getMousePos().x / window.width - .5d, window.getMousePos().y / window.height - .5d);
-		Vector2d mouseDelta = new Vector2d(mousePosNormalized.x - lastMousePosition.x, mousePosNormalized.y - lastMousePosition.y);
-		lastMousePosition = mousePosNormalized;
-
-		camera.rotate((float) mouseDelta.y * dt * mouseSensitivity, (float) mouseDelta.x * dt * mouseSensitivity, 0.0f);
-
-		float xRotClamp = Math.clamp(camera.getRotation().x, -90.0f, 90.0f);
-
-		camera.setRotation(xRotClamp, camera.getRotation().y, camera.getRotation().z);
 	}
 
 	@Override
@@ -186,6 +179,8 @@ public class GameScene extends WorldScene {
 		// Quit
 		if(window.isKeyPressed(GLFW_KEY_ESCAPE)) {
 			glfwSetWindowShouldClose(window.windowHandle, true);
+
+			if(loadingWorld) worldBuilder.stopThread();
 		}
 
 		if(loadingWorld) return;
@@ -199,7 +194,7 @@ public class GameScene extends WorldScene {
 		float up = 0.0f;
 		float vertical = 0.0f;
 
-		float speedMultiplier = 0.05f;
+		float speedMultiplier = 1.f;
 		float fov = (float) Math.toDegrees(camera.startFOV);
 
 		if(window.isKeyPressed(GLFW_KEY_S)) {
@@ -236,7 +231,10 @@ public class GameScene extends WorldScene {
 		camera.updateMatrices(fov);
 
 		Vector3f velocity = player.getVelocityForward(horizontal, up, vertical);
+
+		velocity = Vector.multiplyVector(velocity, player.speed);
 		velocity = Vector.multiplyVector(velocity, speedMultiplier);
+		velocity = Vector.multiplyVector(velocity, dt);
 
 		player.moveAndCollide(velocity, world);
 	}
@@ -244,7 +242,18 @@ public class GameScene extends WorldScene {
 	public void mouseInput() {
 		if(loadingWorld) return;
 
-		// Mouse Related inputs
+		// Camera rotation
+		Vector2d mousePosNormalized = new Vector2d(window.getMousePos().x / window.width - .5d, window.getMousePos().y / window.height - .5d);
+		Vector2d mouseDelta = new Vector2d(mousePosNormalized.x - lastMousePosition.x, mousePosNormalized.y - lastMousePosition.y);
+		lastMousePosition = mousePosNormalized;
+
+		camera.rotate((float) mouseDelta.y * dt * mouseSensitivity, (float) mouseDelta.x * dt * mouseSensitivity, 0.0f);
+
+		float xRotClamp = Math.clamp(camera.getRotation().x, -90.0f, 90.0f);
+
+		camera.setRotation(xRotClamp, camera.getRotation().y, camera.getRotation().z);
+
+		// Clicking
 		Vector3f lookingPosition = camera.getLookingPosition(world, 5, .1f);
 		if(this.debugEntity != null) debugEntity.setPosition(lookingPosition);
 
