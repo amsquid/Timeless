@@ -10,6 +10,4 @@ public interface IGameLogic {
 	void render();
 
 	void cleanup();
-
-	void quit();
 }

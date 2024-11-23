@@ -120,7 +120,7 @@ public class GameEngine implements Runnable {
 	}
 
 	public void quit() {
-		gameLogic.quit();
+		gameLogic.cleanup();
 
 		glfwFreeCallbacks(window.windowHandle);
 		glfwDestroyWindow(window.windowHandle);

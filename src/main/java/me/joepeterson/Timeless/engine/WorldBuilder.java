@@ -22,6 +22,8 @@ public class WorldBuilder implements Runnable {
 	public boolean generatedWorld = false;
 	public Map<Vector3i, Integer> blocksGenerated;
 
+
+
 	private Thread generationThread;
 
 	private final Window window;
@@ -51,6 +53,10 @@ public class WorldBuilder implements Runnable {
 		} else {
 			generationThread.start();
 		}
+	}
+
+	public void stopThread() {
+		generationThread.interrupt();
 	}
 
 	@Override
