@@ -1,15 +1,15 @@
 package me.joepeterson.Timeless.engine.inventory;
 
-public class ItemStack<item extends Item> {
-    private final item item;
+public class ItemStack {
     private int amount;
+    protected Item item;
 
-    public ItemStack(item item) {
+    public ItemStack(Item item) {
         this.item = item;
         amount = 1;
     }
 
-    public ItemStack(item item, int amount) {
+    public ItemStack(Item Item, int amount) {
         this.item = item;
         this.amount = amount;
     }
@@ -19,7 +19,7 @@ public class ItemStack<item extends Item> {
     }
 
     public boolean addAmount(int amount) {
-        if (this.amount + amount > item.getItemStackSize()) return false;
+        if ((this.amount + amount) > item.getItemStackSize()) return false;
         this.amount += amount;
         return true;
     }

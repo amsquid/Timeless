@@ -6,8 +6,8 @@ public class Tool extends Item {
     private double durability;
     private final double durabilityMax;
 
-    public Tool(ItemType itemType, int itemStackSize, String name, Texture texture, boolean isBreakable, double durabilityMax) {
-        super(itemType, itemStackSize, name, texture, isBreakable);
+    public Tool(ItemType itemType, int itemStackSize, String name, Texture texture, double durabilityMax) {
+        super(itemType, itemStackSize, name, texture);
         this.durabilityMax = durabilityMax;
     }
 

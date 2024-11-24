@@ -19,6 +19,7 @@ import me.joepeterson.Timeless.entity.Player;
 import me.joepeterson.Timeless.hud.Crosshair;
 import me.joepeterson.Timeless.world.SpaceWorld;
 import org.joml.Vector2d;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 
@@ -89,6 +90,28 @@ public class GameScene extends WorldScene {
 
 		try {
 			gameHUD.addHUDItem(new Crosshair());
+
+			float offset = 0.0f;
+
+			Vector2f scale = new Vector2f(1/24.f, 1/13.5f);
+			Vector2f oneOver = new Vector2f(scale.x + offset, scale.y + offset); // idk what else to name this :I
+
+			Texture slotTexture = new Texture("textures/ui/slot.png");
+			HUDItem lSlot1 = new HUDItem(slotTexture, new Vector2f(.5f - (oneOver.x * 1.5f) + offset, 1.0f - oneOver.y), scale);
+			HUDItem lSlot2 = new HUDItem(slotTexture, new Vector2f(.5f - (oneOver.x * 2.5f) + offset, 1.0f - oneOver.y), scale);
+			HUDItem lSlot3 = new HUDItem(slotTexture, new Vector2f(.5f - (oneOver.x * 3.5f) + offset, 1.0f - oneOver.y), scale);
+
+			HUDItem rSlot1 = new HUDItem(slotTexture, new Vector2f(.5f + (oneOver.x * 0.5f) + offset, 1.0f - oneOver.y), scale);
+			HUDItem rSlot2 = new HUDItem(slotTexture, new Vector2f(.5f + (oneOver.x * 1.5f) + offset, 1.0f - oneOver.y), scale);
+			HUDItem rSlot3 = new HUDItem(slotTexture, new Vector2f(.5f + (oneOver.x * 2.5f) + offset, 1.0f - oneOver.y), scale);
+
+			gameHUD.addHUDItem(lSlot1);
+			gameHUD.addHUDItem(lSlot2);
+			gameHUD.addHUDItem(lSlot3);
+
+			gameHUD.addHUDItem(rSlot1);
+			gameHUD.addHUDItem(rSlot2);
+			gameHUD.addHUDItem(rSlot3);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

@@ -11,7 +11,7 @@ public class HUDItem {
 
 	private Vector2f position;
 	private Vector2f scale;
-	HUDMesh mesh;
+	protected HUDMesh mesh;
 
 	public Vector2f getPosition() {
 		return position;

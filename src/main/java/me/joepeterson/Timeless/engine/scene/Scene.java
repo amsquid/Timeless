@@ -13,6 +13,8 @@ public class Scene {
 
 	protected final Renderer renderer;
 
+	public boolean paused = false;
+
 	public Scene(Renderer renderer) {
 		this.renderer = renderer;
 
@@ -31,7 +33,11 @@ public class Scene {
 
 	public void update(float dt) { }
 
+	public void pausedUpdate(float dt) { }
+
 	public void input() { }
+
+	public void pausedInput() { }
 
 	public void prerender() { }
 
