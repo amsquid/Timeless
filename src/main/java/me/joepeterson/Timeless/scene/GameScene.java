@@ -42,6 +42,8 @@ public class GameScene extends WorldScene {
 			RockBlock.class
 	};
 
+	int slotStart = 0; // Item position in the HUD array
+
 	private Vector2d lastMousePosition = new Vector2d();
 	public float mouseSensitivity = 5.0f;
 
@@ -89,14 +91,19 @@ public class GameScene extends WorldScene {
 		gameHUD = new HUD();
 
 		try {
+			// Crosshair
 			gameHUD.addHUDItem(new Crosshair());
 
+			// Slot and Item HUDs
 			float offset = 0.0f;
 
 			Vector2f scale = new Vector2f(1/24.f, 1/13.5f);
 			Vector2f oneOver = new Vector2f(scale.x + offset, scale.y + offset); // idk what else to name this :I
 
 			Texture slotTexture = new Texture("textures/ui/slot.png");
+			Texture emptyTexture = new Texture("textures/item/empty.png");
+			
+			// Slot HUD
 			HUDItem lSlot1 = new HUDItem(slotTexture, new Vector2f(.5f - (oneOver.x * 1.5f) + offset, 1.0f - oneOver.y), scale);
 			HUDItem lSlot2 = new HUDItem(slotTexture, new Vector2f(.5f - (oneOver.x * 2.5f) + offset, 1.0f - oneOver.y), scale);
 			HUDItem lSlot3 = new HUDItem(slotTexture, new Vector2f(.5f - (oneOver.x * 3.5f) + offset, 1.0f - oneOver.y), scale);
@@ -112,6 +119,23 @@ public class GameScene extends WorldScene {
 			gameHUD.addHUDItem(rSlot1);
 			gameHUD.addHUDItem(rSlot2);
 			gameHUD.addHUDItem(rSlot3);
+			
+			// Item HUD
+			HUDItem lItem1 = new HUDItem(emptyTexture, new Vector2f(.5f - (oneOver.x * 1.5f) + offset, 1.0f - oneOver.y), scale);
+			HUDItem lItem2 = new HUDItem(emptyTexture, new Vector2f(.5f - (oneOver.x * 2.5f) + offset, 1.0f - oneOver.y), scale);
+			HUDItem lItem3 = new HUDItem(emptyTexture, new Vector2f(.5f - (oneOver.x * 3.5f) + offset, 1.0f - oneOver.y), scale);
+
+			HUDItem rItem1 = new HUDItem(emptyTexture, new Vector2f(.5f + (oneOver.x * 0.5f) + offset, 1.0f - oneOver.y), scale);
+			HUDItem rItem2 = new HUDItem(emptyTexture, new Vector2f(.5f + (oneOver.x * 1.5f) + offset, 1.0f - oneOver.y), scale);
+			HUDItem rItem3 = new HUDItem(emptyTexture, new Vector2f(.5f + (oneOver.x * 2.5f) + offset, 1.0f - oneOver.y), scale);
+
+			gameHUD.addHUDItem(lItem1);
+			gameHUD.addHUDItem(lItem2);
+			gameHUD.addHUDItem(lItem3);
+
+			gameHUD.addHUDItem(rItem1);
+			gameHUD.addHUDItem(rItem2);
+			gameHUD.addHUDItem(rItem3);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
