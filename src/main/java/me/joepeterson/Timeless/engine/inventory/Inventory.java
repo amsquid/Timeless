@@ -16,7 +16,14 @@ public class Inventory {
     public ArrayList<ItemStack> getInventory() {
         return inventory;
     }
+
     public void addItem(ItemStack itemStack) {
+        inventory.add(itemStack);
+    }
+
+    public void addItem(Item item, int amount) {
+        ItemStack itemStack = new ItemStack(item, amount);
+
         inventory.add(itemStack);
     }
 
