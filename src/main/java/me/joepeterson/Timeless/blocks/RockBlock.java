@@ -1,12 +1,13 @@
 package me.joepeterson.Timeless.blocks;
 
 import me.joepeterson.Timeless.engine.block.Block;
+import me.joepeterson.Timeless.engine.block.BreakableBlock;
 import me.joepeterson.Timeless.engine.texture.Texture;
 import org.joml.Vector3i;
 
 import java.io.IOException;
 
-public class RockBlock extends Block {
+public class RockBlock extends BreakableBlock {
 	public RockBlock(Vector3i position) {
 		Texture texture = null;
 		try {
