@@ -10,8 +10,6 @@ public class Block {
 
 	public Vector3i position;
 
-	public int hardness = 0;
-
 	public CubeMesh mesh;
 
 	public final BoundingBox boundingBox;
