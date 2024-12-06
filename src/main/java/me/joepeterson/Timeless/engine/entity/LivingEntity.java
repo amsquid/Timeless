@@ -1,14 +1,26 @@
 package me.joepeterson.Timeless.engine.entity;
 
+import me.joepeterson.Timeless.engine.inventory.Inventory;
+
 public class LivingEntity extends Entity {
 
-	public float health;
-	public float maxHealth;
-	public float damage;
-	public float speed;
+	private float health;
+	private float maxHealth;
+	private float damage;
+	private float speed;
+
+	private Inventory inventory;
 
 	public float getHealth() {
 		return health;
+	}
+
+	public void setHealth(float health) {
+		if(health > this.maxHealth) {
+			this.health = health;
+		} else {
+			this.health = maxHealth;
+		}
 	}
 
 	public float getMaxHealth() {
@@ -27,6 +39,10 @@ public class LivingEntity extends Entity {
 		return speed;
 	}
 
+	public Inventory getInventory() {
+		return this.inventory;
+	}
+
 	public LivingEntity(float speed) {
 		super();
 
@@ -34,6 +50,7 @@ public class LivingEntity extends Entity {
 		this.health = 100;
 		this.maxHealth = 100;
 		this.damage = 1;
+		this.inventory = new Inventory();
 	}
 
 }
