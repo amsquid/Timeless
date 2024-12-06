@@ -33,6 +33,10 @@ public class HUDItem {
 		this.scale = scale;
 	}
 
+	public void refreshTexture(Texture newTexture) {
+		mesh = new HUDMesh(newTexture, position, scale);
+	}
+
 	public HUDItem(Texture texture, Vector2f position, Vector2f scale) {
 		mesh = new HUDMesh(texture, position, scale);
 
