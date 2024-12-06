@@ -1,6 +1,5 @@
-package me.joepeterson.Timeless.blocks;
+package me.joepeterson.Timeless.block;
 
-import me.joepeterson.Timeless.engine.block.Block;
 import me.joepeterson.Timeless.engine.block.BreakableBlock;
 import me.joepeterson.Timeless.engine.texture.Texture;
 import org.joml.Vector3i;
