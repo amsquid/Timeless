@@ -18,6 +18,10 @@ public class ItemStack {
         return amount;
     }
 
+    public Item getItem() {
+        return this.item;
+    }
+
     public boolean addAmount(int amount) {
         if ((this.amount + amount) > item.getItemStackSize()) return false;
         this.amount += amount;
