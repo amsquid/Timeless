@@ -13,7 +13,7 @@ public class Inventory {
         this.inventory = inventory;
     }
 
-    public ArrayList<ItemStack> getInventory() {
+    public ArrayList<ItemStack> getItems() {
         return inventory;
     }
 
