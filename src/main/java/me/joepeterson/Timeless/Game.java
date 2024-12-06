@@ -1,33 +1,12 @@
 package me.joepeterson.Timeless;
 
-import me.joepeterson.Timeless.blocks.RockBlock;
 import me.joepeterson.Timeless.engine.*;
 import me.joepeterson.Timeless.engine.block.Block;
-import me.joepeterson.Timeless.engine.entity.Camera;
-import me.joepeterson.Timeless.engine.entity.Entity;
-import me.joepeterson.Timeless.engine.entity.MeshEntity;
-import me.joepeterson.Timeless.engine.hud.FullscreenHUDItem;
-import me.joepeterson.Timeless.engine.hud.HUD;
-import me.joepeterson.Timeless.engine.hud.HUDItem;
-import me.joepeterson.Timeless.engine.mesh.ModelMesh;
 import me.joepeterson.Timeless.engine.scene.Scene;
 import me.joepeterson.Timeless.engine.scene.WorldScene;
-import me.joepeterson.Timeless.engine.texture.Texture;
-import me.joepeterson.Timeless.engine.util.Vector;
-import me.joepeterson.Timeless.engine.world.World;
-import me.joepeterson.Timeless.entity.Player;
-import me.joepeterson.Timeless.hud.Crosshair;
 import me.joepeterson.Timeless.scene.GameScene;
 import me.joepeterson.Timeless.world.SpaceWorld;
-import org.joml.Vector2d;
-import org.joml.Vector3f;
-import org.joml.Vector3i;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
 public class Game implements IGameLogic {
