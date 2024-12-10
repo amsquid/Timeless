@@ -6,10 +6,10 @@ public class ItemStack {
 
     public ItemStack(Item item) {
         this.item = item;
-        amount = 1;
+        this.amount = 1;
     }
 
-    public ItemStack(Item Item, int amount) {
+    public ItemStack(Item item, int amount) {
         this.item = item;
         this.amount = amount;
     }
