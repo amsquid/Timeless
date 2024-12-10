@@ -1,6 +1,6 @@
 package me.joepeterson.Timeless.scene;
 
-import me.joepeterson.Timeless.blocks.RockBlock;
+import me.joepeterson.Timeless.block.RockBlock;
 import me.joepeterson.Timeless.engine.Renderer;
 import me.joepeterson.Timeless.engine.Window;
 import me.joepeterson.Timeless.engine.WorldBuilder;
@@ -10,6 +10,8 @@ import me.joepeterson.Timeless.engine.entity.MeshEntity;
 import me.joepeterson.Timeless.engine.hud.FullscreenHUDItem;
 import me.joepeterson.Timeless.engine.hud.HUD;
 import me.joepeterson.Timeless.engine.hud.HUDItem;
+import me.joepeterson.Timeless.engine.inventory.Item;
+import me.joepeterson.Timeless.engine.inventory.ItemStack;
 import me.joepeterson.Timeless.engine.mesh.ModelMesh;
 import me.joepeterson.Timeless.engine.scene.WorldScene;
 import me.joepeterson.Timeless.engine.texture.Texture;
@@ -17,6 +19,7 @@ import me.joepeterson.Timeless.engine.util.Vector;
 import me.joepeterson.Timeless.engine.world.World;
 import me.joepeterson.Timeless.entity.Player;
 import me.joepeterson.Timeless.hud.Crosshair;
+import me.joepeterson.Timeless.item.Rock;
 import me.joepeterson.Timeless.world.SpaceWorld;
 import org.joml.Vector2d;
 import org.joml.Vector2f;
@@ -78,6 +81,12 @@ public class GameScene extends WorldScene {
 		camera = new Camera(window);
 		player = new Player(0.005f);
 
+		try {
+			player.getInventory().addItem(new Rock(), 1);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
 		// Loading HUD
 		loadingHUD = new HUD();
 
@@ -102,7 +111,26 @@ public class GameScene extends WorldScene {
 
 			Texture slotTexture = new Texture("textures/ui/slot.png");
 			Texture emptyTexture = new Texture("textures/item/empty.png");
-			
+
+			// Item HUD
+			slotStart = gameHUD.getHUDItems().size();
+
+			HUDItem lItem1 = new HUDItem(emptyTexture, new Vector2f(.5f - (oneOver.x * 1.5f) + offset, 1.0f - oneOver.y), scale);
+			HUDItem lItem2 = new HUDItem(emptyTexture, new Vector2f(.5f - (oneOver.x * 2.5f) + offset, 1.0f - oneOver.y), scale);
+			HUDItem lItem3 = new HUDItem(emptyTexture, new Vector2f(.5f - (oneOver.x * 3.5f) + offset, 1.0f - oneOver.y), scale);
+
+			HUDItem rItem1 = new HUDItem(emptyTexture, new Vector2f(.5f + (oneOver.x * 0.5f) + offset, 1.0f - oneOver.y), scale);
+			HUDItem rItem2 = new HUDItem(emptyTexture, new Vector2f(.5f + (oneOver.x * 1.5f) + offset, 1.0f - oneOver.y), scale);
+			HUDItem rItem3 = new HUDItem(emptyTexture, new Vector2f(.5f + (oneOver.x * 2.5f) + offset, 1.0f - oneOver.y), scale);
+
+			gameHUD.addHUDItem(lItem1);
+			gameHUD.addHUDItem(lItem2);
+			gameHUD.addHUDItem(lItem3);
+
+			gameHUD.addHUDItem(rItem1);
+			gameHUD.addHUDItem(rItem2);
+			gameHUD.addHUDItem(rItem3);
+
 			// Slot HUD
 			HUDItem lSlot1 = new HUDItem(slotTexture, new Vector2f(.5f - (oneOver.x * 1.5f) + offset, 1.0f - oneOver.y), scale);
 			HUDItem lSlot2 = new HUDItem(slotTexture, new Vector2f(.5f - (oneOver.x * 2.5f) + offset, 1.0f - oneOver.y), scale);
@@ -119,23 +147,6 @@ public class GameScene extends WorldScene {
 			gameHUD.addHUDItem(rSlot1);
 			gameHUD.addHUDItem(rSlot2);
 			gameHUD.addHUDItem(rSlot3);
-			
-			// Item HUD
-			HUDItem lItem1 = new HUDItem(emptyTexture, new Vector2f(.5f - (oneOver.x * 1.5f) + offset, 1.0f - oneOver.y), scale);
-			HUDItem lItem2 = new HUDItem(emptyTexture, new Vector2f(.5f - (oneOver.x * 2.5f) + offset, 1.0f - oneOver.y), scale);
-			HUDItem lItem3 = new HUDItem(emptyTexture, new Vector2f(.5f - (oneOver.x * 3.5f) + offset, 1.0f - oneOver.y), scale);
-
-			HUDItem rItem1 = new HUDItem(emptyTexture, new Vector2f(.5f + (oneOver.x * 0.5f) + offset, 1.0f - oneOver.y), scale);
-			HUDItem rItem2 = new HUDItem(emptyTexture, new Vector2f(.5f + (oneOver.x * 1.5f) + offset, 1.0f - oneOver.y), scale);
-			HUDItem rItem3 = new HUDItem(emptyTexture, new Vector2f(.5f + (oneOver.x * 2.5f) + offset, 1.0f - oneOver.y), scale);
-
-			gameHUD.addHUDItem(lItem1);
-			gameHUD.addHUDItem(lItem2);
-			gameHUD.addHUDItem(lItem3);
-
-			gameHUD.addHUDItem(rItem1);
-			gameHUD.addHUDItem(rItem2);
-			gameHUD.addHUDItem(rItem3);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -157,8 +168,11 @@ public class GameScene extends WorldScene {
 			if(loadingWorld) {
 				this.hud = loadingHUD;
 			} else {
+				// HUD Setup
 				this.hud = gameHUD;
 
+				// Seeing which blocks to render
+				// TODO: Make more efficient
 				blocksToRender.clear();
 
 				for(Vector3i position : world.getBlocks().keySet()) {
@@ -174,6 +188,22 @@ public class GameScene extends WorldScene {
 
 				entitiesToRender.clear();
 				entitiesToRender.addAll(world.getEntities());
+
+				// Item setup in HUD
+				for(int i = 0; i < 6; i++) {
+					if(i > player.getInventory().getItems().size() - 1) {
+						gameHUD.getHUDItems().get(slotStart + i).shouldRender = false;
+
+						continue;
+					}
+					ItemStack itemStack = player.getInventory().getItems().get(i);
+					Item item = itemStack.getItem();
+					Texture itemTexture = item.getTexture();
+
+					HUDItem hudItem = gameHUD.getHUDItems().get(slotStart + i);
+					hudItem.refreshTexture(itemTexture);
+					hudItem.shouldRender = true;
+				}
 			}
 
 		} catch (Exception e) {
@@ -279,7 +309,7 @@ public class GameScene extends WorldScene {
 
 		Vector3f velocity = player.getVelocityForward(horizontal, up, vertical);
 
-		velocity = Vector.multiplyVector(velocity, player.speed);
+		velocity = Vector.multiplyVector(velocity, player.getSpeed());
 		velocity = Vector.multiplyVector(velocity, speedMultiplier);
 		velocity = Vector.multiplyVector(velocity, dt);
 

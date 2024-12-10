@@ -12,6 +12,7 @@ public class HUDItem {
 	private Vector2f position;
 	private Vector2f scale;
 	protected HUDMesh mesh;
+	public boolean shouldRender = true;
 
 	public Vector2f getPosition() {
 		return position;
@@ -34,7 +35,8 @@ public class HUDItem {
 	}
 
 	public void refreshTexture(Texture newTexture) {
-		mesh = new HUDMesh(newTexture, position, scale);
+		this.mesh.cleanup();
+		this.mesh = new HUDMesh(newTexture, position, scale);
 	}
 
 	public HUDItem(Texture texture, Vector2f position, Vector2f scale) {
@@ -45,6 +47,6 @@ public class HUDItem {
 	}
 
 	public void render() {
-		mesh.render();
+		if(shouldRender) mesh.render();
 	}
 }
