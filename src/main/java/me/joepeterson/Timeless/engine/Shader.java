@@ -17,12 +17,16 @@ public class Shader {
 	private int vertexId;
 	private int fragmentId;
 
+	public RenderingType renderingType;
+
 	private final Map<String, Integer> uniforms;
 
 	public Shader() {
 		id = glCreateProgram();
 
 		uniforms = new HashMap<>();
+
+		this.renderingType = RenderingType.BASIC;
 	}
 
 	public void createVertexShader(String source) throws Exception {

@@ -1,6 +1,7 @@
 package me.joepeterson.Timeless.engine.scene;
 
 import me.joepeterson.Timeless.engine.Renderer;
+import me.joepeterson.Timeless.engine.RenderingType;
 import me.joepeterson.Timeless.engine.block.Block;
 import me.joepeterson.Timeless.engine.entity.Camera;
 import me.joepeterson.Timeless.engine.entity.Entity;
@@ -57,6 +58,8 @@ public class WorldScene extends Scene {
 
 	@Override
 	public void render() {
+		if(renderer.getRenderingType() != RenderingType.D3) renderer.setRenderingType(RenderingType.D3);
+
 		for(Block block : blocksToRender.values()) {
 			renderer.render(block, camera);
 		}

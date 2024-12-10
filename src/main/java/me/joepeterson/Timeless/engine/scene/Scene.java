@@ -1,6 +1,7 @@
 package me.joepeterson.Timeless.engine.scene;
 
 import me.joepeterson.Timeless.engine.Renderer;
+import me.joepeterson.Timeless.engine.RenderingType;
 import me.joepeterson.Timeless.engine.Window;
 import me.joepeterson.Timeless.engine.entity.Camera;
 import me.joepeterson.Timeless.engine.hud.HUD;
@@ -42,6 +43,8 @@ public class Scene {
 	public void prerender() { }
 
 	public void render() {
+		if(renderer.getRenderingType() != RenderingType.D2) renderer.setRenderingType(RenderingType.D2);
+
 		for(HUDItem hudItem : hud.getHUDItems()) {
 			renderer.render(hudItem, camera);
 		}
