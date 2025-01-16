@@ -72,6 +72,8 @@ public class Vector {
 	}
 
 	public static Vector3f getNormalBlockFace(Vector3f a, Block block) {
+		if(block == null) return null;
+
 		BoundingBox box = block.boundingBox;
 		Vector3f min = box.getMin();
 		Vector3f max = box.getMax();
@@ -83,19 +85,19 @@ public class Vector {
 			return new Vector3f(1, 0, 0); // Normal vector for +X face
 		} else if (Math.abs(a.x - min.x) < tolerance) {
 			System.out.println("-X");
-			return new Vector3f(-1, 0, 0); // Normal vector for -X face
+			return new Vector3f(-1.001f, 0, 0); // Normal vector for -X face
 		} else if (Math.abs(a.y - max.y) < tolerance) {
 			System.out.println("+Y");
 			return new Vector3f(0, 1, 0); // Normal vector for +Y face
 		} else if (Math.abs(a.y - min.y) < tolerance) {
 			System.out.println("-Y");
-			return new Vector3f(0, -1, 0); // Normal vector for -Y face
+			return new Vector3f(0, -1.001f, 0); // Normal vector for -Y face
 		} else if (Math.abs(a.z - max.z) < tolerance) {
 			System.out.println("+Z");
 			return new Vector3f(0, 0, 1); // Normal vector for +Z face
 		} else if (Math.abs(a.z - min.z) < tolerance) {
 			System.out.println("-Z");
-			return new Vector3f(0, 0, -1); // Normal vector for -Z face
+			return new Vector3f(0, 0, -1.001f); // Normal vector for -Z face
 		}
 
 		return null;
