@@ -158,6 +158,8 @@ public class GameScene extends WorldScene {
 
 		this.worldBuilder = new WorldBuilder(this.world, window);
 		this.worldBuilder.generateWorld();
+
+		updateSlots();
 	}
 
 	@Override
@@ -202,17 +204,6 @@ public class GameScene extends WorldScene {
 //					hudItem.refreshTexture(itemTexture);
 //					hudItem.shouldRender = true;
 				}
-
-				// Slot setup in HUD
-//				for(int i = 0; i < 6; i++) {
-//					int slot = i % 3;
-//
-//					if(slot == selectedSlot) {
-//						gameHUD.getHUDItems().get(i + slotStart).refreshTexture(selectedSlotTexture);
-//					} else {
-//						gameHUD.getHUDItems().get(i + slotStart).refreshTexture(slotTexture);
-//					}
-//				}
 			}
 
 		} catch (Exception e) {
@@ -325,9 +316,24 @@ public class GameScene extends WorldScene {
 		player.moveAndCollide(velocity, world);
 
 		// Slot selection
+		boolean slotChanged =
+				window.isKeyPressed(GLFW_KEY_1) ||
+				window.isKeyPressed(GLFW_KEY_2) ||
+				window.isKeyPressed(GLFW_KEY_3) ||
+				window.isKeyPressed(GLFW_KEY_4) ||
+				window.isKeyPressed(GLFW_KEY_5) ||
+				window.isKeyPressed(GLFW_KEY_6);
+
 		if(window.isKeyPressed(GLFW_KEY_1)) selectedSlot = 0;
 		if(window.isKeyPressed(GLFW_KEY_2)) selectedSlot = 1;
 		if(window.isKeyPressed(GLFW_KEY_3)) selectedSlot = 2;
+		if(window.isKeyPressed(GLFW_KEY_4)) selectedSlot = 3;
+		if(window.isKeyPressed(GLFW_KEY_5)) selectedSlot = 4;
+		if(window.isKeyPressed(GLFW_KEY_6)) selectedSlot = 5;
+
+		if(slotChanged) {
+			updateSlots();
+		}
 	}
 
 	public void mouseInput() {
@@ -363,6 +369,16 @@ public class GameScene extends WorldScene {
 
 		if(window.isMouseButtonReleased(GLFW_MOUSE_BUTTON_LEFT)) {
 			brokenBlock = false;
+		}
+	}
+
+	public void updateSlots() {
+		for(int i = 0; i < 6; i++) {
+			if(i == selectedSlot) {
+				gameHUD.getHUDItems().get(i + slotStart).refreshTexture(selectedSlotTexture);
+			} else {
+				gameHUD.getHUDItems().get(i + slotStart).refreshTexture(slotTexture);
+			}
 		}
 	}
 }
