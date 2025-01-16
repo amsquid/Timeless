@@ -30,6 +30,10 @@ public class ModelMesh extends BaseMesh {
 
 		this.modelPath = modelURL.getPath();
 
+		if(System.getProperties().getProperty("os.name").split(" ")[0].equals("Windows")) {
+			this.modelPath = this.modelPath.replaceFirst("/", "");
+		}
+
 		loadModelFile(this.modelPath);
 
 		updateBuffers(
