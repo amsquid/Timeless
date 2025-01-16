@@ -54,6 +54,7 @@ public class GameScene extends WorldScene {
 	public float mouseSensitivity = 5.0f;
 
 	public boolean brokenBlock = false;
+	public boolean placedBlock = false;
 
 	Window window;
 
@@ -350,7 +351,7 @@ public class GameScene extends WorldScene {
 
 		camera.setRotation(xRotClamp, camera.getRotation().y, camera.getRotation().z);
 
-		// Clicking
+		// Mouse Down
 		Vector3f lookingPosition = camera.getLookingPosition(world, 5, .01f);
 		if(this.debugEntity != null) debugEntity.setPosition(lookingPosition);
 
@@ -367,8 +368,37 @@ public class GameScene extends WorldScene {
 			brokenBlock = true;
 		}
 
+		if(window.isMouseButtonPressed(GLFW_MOUSE_BUTTON_RIGHT) && !placedBlock) {
+			Vector3i lookingBlockPosition = Vector.toVector3iFloor(lookingPosition);
+			Block lookingBlock = world.getBlocks().get(lookingBlockPosition);
+			Vector3f face = Vector.getNormalBlockFace(lookingPosition, lookingBlock);
+
+			if(face == null) {
+				System.err.println("Invalid face at looking position");
+			} else {
+				Vector3i newBlockPosition = Vector.toVector3iRound(
+						Vector.addVectors(face.mul(.5f), lookingBlockPosition)
+				);
+
+				System.out.println(newBlockPosition);
+
+				RockBlock rockBlock = new RockBlock(newBlockPosition);
+
+				world.addBlock(rockBlock);
+				world.fixFaces();
+			}
+
+
+			placedBlock = true;
+		}
+
+		// Mouse Up
 		if(window.isMouseButtonReleased(GLFW_MOUSE_BUTTON_LEFT)) {
 			brokenBlock = false;
+		}
+
+		if(window.isMouseButtonReleased(GLFW_MOUSE_BUTTON_RIGHT)) {
+			placedBlock = false;
 		}
 	}
 
