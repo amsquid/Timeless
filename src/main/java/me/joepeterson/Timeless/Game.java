@@ -54,7 +54,7 @@ public class Game implements IGameLogic {
 		this.dt = dt;
 
 		// Debug
-		System.out.println(dt);
+		//System.out.println(dt);
 
 		activeScene.update(dt);
 	}
