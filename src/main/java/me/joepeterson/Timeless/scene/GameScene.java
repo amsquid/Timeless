@@ -115,50 +115,36 @@ public class GameScene extends WorldScene {
 			Vector2f scale = new Vector2f(1/24.f, 1/13.5f);
 			Vector2f slotScale = new Vector2f(1/24.f, 1/6.75f);
 			Vector2f oneOver = new Vector2f(scale.x + offset, scale.y + offset); // idk what else to name this :I
-			Vector2f slotOneOver = new Vector2f(slotScale.x + offset, slotScale.y + offset); // idk what else to name this :I
+			Vector2f slotOneOver = new Vector2f(slotScale.x + offset, slotScale.y + offset);
 
 			slotTexture = new Texture("textures/ui/slot.png");
 			selectedSlotTexture = new Texture("textures/ui/slot_selected.png");
 
 			Texture emptyTexture = new Texture("textures/item/empty.png");
 
-			// Item HUD
-			itemStart = gameHUD.getHUDItems().size();
-
-			HUDItem lItem1 = new HUDItem(emptyTexture, new Vector2f(.5f - (oneOver.x * 1.5f) + offset, 1.0f - oneOver.y), scale);
-			HUDItem lItem2 = new HUDItem(emptyTexture, new Vector2f(.5f - (oneOver.x * 2.5f) + offset, 1.0f - oneOver.y), scale);
-			HUDItem lItem3 = new HUDItem(emptyTexture, new Vector2f(.5f - (oneOver.x * 3.5f) + offset, 1.0f - oneOver.y), scale);
-
-			HUDItem rItem1 = new HUDItem(emptyTexture, new Vector2f(.5f + (oneOver.x * 0.5f) + offset, 1.0f - oneOver.y), scale);
-			HUDItem rItem2 = new HUDItem(emptyTexture, new Vector2f(.5f + (oneOver.x * 1.5f) + offset, 1.0f - oneOver.y), scale);
-			HUDItem rItem3 = new HUDItem(emptyTexture, new Vector2f(.5f + (oneOver.x * 2.5f) + offset, 1.0f - oneOver.y), scale);
-
-			gameHUD.addHUDItem(lItem1);
-			gameHUD.addHUDItem(lItem2);
-			gameHUD.addHUDItem(lItem3);
-
-			gameHUD.addHUDItem(rItem1);
-			gameHUD.addHUDItem(rItem2);
-			gameHUD.addHUDItem(rItem3);
-
-			// Slot HUD
+			// Slots
 			slotStart = gameHUD.getHUDItems().size();
 
-			HUDItem lSlot1 = new HUDItem(slotTexture, new Vector2f(.5f - (slotOneOver.x * 1.5f) + offset, 1.0f - slotOneOver.y), slotScale);
-			HUDItem lSlot2 = new HUDItem(slotTexture, new Vector2f(.5f - (slotOneOver.x * 2.5f) + offset, 1.0f - slotOneOver.y), slotScale);
-			HUDItem lSlot3 = new HUDItem(slotTexture, new Vector2f(.5f - (slotOneOver.x * 3.5f) + offset, 1.0f - slotOneOver.y), slotScale);
+			for(int i = 0; i < 6; i++) {
+				float x = (.5f - (slotOneOver.x * 3)) + (slotOneOver.x * (i)) + offset;
+				float y = 1.0f - slotOneOver.y;
 
-			HUDItem rSlot1 = new HUDItem(slotTexture, new Vector2f(.5f + (slotOneOver.x * 0.5f) + offset, 1.0f - slotOneOver.y), slotScale);
-			HUDItem rSlot2 = new HUDItem(slotTexture, new Vector2f(.5f + (slotOneOver.x * 1.5f) + offset, 1.0f - slotOneOver.y), slotScale);
-			HUDItem rSlot3 = new HUDItem(slotTexture, new Vector2f(.5f + (slotOneOver.x * 2.5f) + offset, 1.0f - slotOneOver.y), slotScale);
+				HUDItem slot = new HUDItem(slotTexture, new Vector2f(x, y), slotScale);
 
-			gameHUD.addHUDItem(lSlot1);
-			gameHUD.addHUDItem(lSlot2);
-			gameHUD.addHUDItem(lSlot3);
+				gameHUD.addHUDItem(slot);
+			}
 
-			gameHUD.addHUDItem(rSlot1);
-			gameHUD.addHUDItem(rSlot2);
-			gameHUD.addHUDItem(rSlot3);
+			// Items
+			itemStart = gameHUD.getHUDItems().size();
+
+			for(int i = 0; i < 6; i++) {
+				float x = (.5f - (oneOver.x * 3)) + (oneOver.x * (i)) + offset;
+				float y = 1.0f - oneOver.y;
+
+				HUDItem slot = new HUDItem(emptyTexture, new Vector2f(x, y), scale);
+
+				gameHUD.addHUDItem(slot);
+			}
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -208,25 +194,25 @@ public class GameScene extends WorldScene {
 
 						continue;
 					}
-					ItemStack itemStack = player.getInventory().getItems().get(i);
-					Item item = itemStack.getItem();
-					Texture itemTexture = item.getTexture();
-
-					HUDItem hudItem = gameHUD.getHUDItems().get(itemStart + i);
-					hudItem.refreshTexture(itemTexture);
-					hudItem.shouldRender = true;
+//					ItemStack itemStack = player.getInventory().getItems().get(i);
+//					Item item = itemStack.getItem();
+//					Texture itemTexture = item.getTexture();
+//
+//					HUDItem hudItem = gameHUD.getHUDItems().get(itemStart + i);
+//					hudItem.refreshTexture(itemTexture);
+//					hudItem.shouldRender = true;
 				}
 
 				// Slot setup in HUD
-				for(int i = 0; i < 6; i++) {
-					int slot = i % 3;
-
-					if(slot == selectedSlot) {
-						gameHUD.getHUDItems().get(i + slotStart).refreshTexture(selectedSlotTexture);
-					} else {
-						gameHUD.getHUDItems().get(i + slotStart).refreshTexture(slotTexture);
-					}
-				}
+//				for(int i = 0; i < 6; i++) {
+//					int slot = i % 3;
+//
+//					if(slot == selectedSlot) {
+//						gameHUD.getHUDItems().get(i + slotStart).refreshTexture(selectedSlotTexture);
+//					} else {
+//						gameHUD.getHUDItems().get(i + slotStart).refreshTexture(slotTexture);
+//					}
+//				}
 			}
 
 		} catch (Exception e) {
@@ -359,7 +345,7 @@ public class GameScene extends WorldScene {
 		camera.setRotation(xRotClamp, camera.getRotation().y, camera.getRotation().z);
 
 		// Clicking
-		Vector3f lookingPosition = camera.getLookingPosition(world, 5, .1f);
+		Vector3f lookingPosition = camera.getLookingPosition(world, 5, .01f);
 		if(this.debugEntity != null) debugEntity.setPosition(lookingPosition);
 
 		if(window.isMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT) && !brokenBlock) {
