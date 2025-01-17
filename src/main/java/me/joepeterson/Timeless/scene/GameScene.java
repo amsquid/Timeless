@@ -53,8 +53,8 @@ public class GameScene extends WorldScene {
 	private Vector2d lastMousePosition = new Vector2d();
 	public float mouseSensitivity = 5.0f;
 
-	public boolean brokenBlock = false;
-	public boolean placedBlock = false;
+	boolean brokenBlock = false;
+	boolean placedBlock = false;
 
 	Window window;
 
