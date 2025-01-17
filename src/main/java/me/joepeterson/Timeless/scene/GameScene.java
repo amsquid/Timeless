@@ -230,6 +230,8 @@ public class GameScene extends WorldScene {
 
 				this.hud = gameHUD;
 
+				world.fixFaces();
+
 				loadingWorld = false;
 			} catch (Exception e) {
 				throw new RuntimeException(e);
@@ -362,7 +364,7 @@ public class GameScene extends WorldScene {
 			if(lookingBlock != null) {
 				if (!world.deleteBlock(lookingBlock.position)) System.out.println("Couldn't delete block");
 
-				world.fixFaces(blocksToRender.keySet());
+				world.fixFacesAround(lookingBlockPosition, 1);
 			}
 
 			brokenBlock = true;
@@ -380,14 +382,13 @@ public class GameScene extends WorldScene {
 						Vector.addVectors(face.mul(.5f), lookingBlockPosition)
 				);
 
-				System.out.println(newBlockPosition);
-
 				RockBlock rockBlock = new RockBlock(newBlockPosition);
 
-				world.addBlock(rockBlock);
-				world.fixFaces();
+				if(!rockBlock.boundingBox.collidesWith(new Vector3f(), player.getBoundingBox())) {
+					world.addBlock(rockBlock);
+					world.fixFacesAround(newBlockPosition, 1);
+				}
 			}
-
 
 			placedBlock = true;
 		}
