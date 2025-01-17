@@ -4,6 +4,7 @@ import me.joepeterson.Timeless.engine.block.Block;
 import me.joepeterson.Timeless.engine.block.BlockFace;
 import me.joepeterson.Timeless.engine.entity.MeshEntity;
 import me.joepeterson.Timeless.engine.mesh.CubeMesh;
+import me.joepeterson.Timeless.engine.util.Vector;
 import org.joml.Vector3i;
 
 import java.lang.reflect.InvocationTargetException;
@@ -56,6 +57,20 @@ public class World {
 			Block block = (Block) blockDictionary[id].getDeclaredConstructors()[0].newInstance(position);
 
 			addBlock(block);
+		}
+	}
+
+	public void fixFacesAround(Vector3i position, int checkDiameter) {
+		for(int x = -checkDiameter; x <= checkDiameter; x++) {
+			for(int y = -checkDiameter; y <= checkDiameter; y++) {
+				for(int z = -checkDiameter; z <= checkDiameter; z++) {
+					Vector3i blockPos = Vector.toVector3i(Vector.addVectors(position, new Vector3i(x, y, z)));
+
+					if(!blocks.containsKey(blockPos)) continue;
+
+					fixFace(blockPos);
+				}
+			}
 		}
 	}
 
