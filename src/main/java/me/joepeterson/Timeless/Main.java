@@ -14,13 +14,13 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class Main {
 	public void run() {
-		System.out.println("Working Directory = " + System.getProperty("user.dir"));
 		System.out.println("LWJGL " + Version.getVersion());
 
 		try {
 			IGameLogic iGameLogic = new Game();
 			GameEngine gameEngine = new GameEngine("Timeless", 1280, 720, 1, iGameLogic);
 
+			System.out.println("Starting game engine");
 			gameEngine.start();
 		} catch (Exception e) {
 			e.printStackTrace();

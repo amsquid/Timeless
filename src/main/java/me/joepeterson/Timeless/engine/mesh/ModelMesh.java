@@ -27,8 +27,6 @@ public class ModelMesh extends BaseMesh {
 		String userDir = System.getProperty("user.dir");
 		this.modelPath = userDir + "/" + modelPath;
 
-		System.out.println(this.modelPath);
-
 		loadModelFile(this.modelPath);
 
 		updateBuffers(
