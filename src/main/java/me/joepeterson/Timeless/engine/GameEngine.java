@@ -59,22 +59,26 @@ public class GameEngine implements Runnable {
 	public void run() {
 		try {
 			// Making window
+			System.out.println("Setting up window");
 			window = new Window(title, width, height);
 
 			// Make game context current
+			System.out.println("Making window context current");
 			glfwMakeContextCurrent(window.windowHandle);
 			GL.createCapabilities();
 
 			// V-Sync
+			System.out.println("Setting swap interval to " + vSync);
 			glfwSwapInterval(vSync);
 
 			// Enabling stuff
+			System.out.println("Enabling depth test");
 			glEnable(GL_DEPTH_TEST);
+			System.out.println("Enabling texture 2d");
 			glEnable(GL_TEXTURE_2D);
 
-
-
 			// Initializing game logic
+			System.out.println("Initializing game logic");
 			gameLogic.init(window);
 
 			long initialTime = System.currentTimeMillis();
@@ -84,6 +88,8 @@ public class GameEngine implements Runnable {
 			float deltaFps = 0;
 
 			long updateTime = initialTime;
+
+			System.out.println("Starting game loop");
 
 			// Game loop
 			while(!glfwWindowShouldClose(window.windowHandle)) {

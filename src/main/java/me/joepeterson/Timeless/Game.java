@@ -26,21 +26,24 @@ public class Game implements IGameLogic {
 	@Override
 	public void init(Window window) throws Exception {
 		// Culling
+		System.out.println("Enabling culling");
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
 
 		// Alpha Blending
+		System.out.println("Enabling alpha blending");
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		// Setup
+		System.out.println("Setting up window");
 		this.window = window;
-
 		window.update();
 
 		System.out.println("Setting up renderer");
 		renderer.init();
 
+		System.out.println("Setting up active scene");
 		this.activeScene = new GameScene(renderer, new SpaceWorld());
 		activeScene.init(window);
 	}
