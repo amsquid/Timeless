@@ -40,7 +40,7 @@ public class Vector {
 	}
 
 	public static Vector3i toVector3iRound(Vector3f a) {
-		return new Vector3i((int) Math.round(a.x), (int) Math.round(a.y), (int) Math.round(a.z));
+		return new Vector3i(Math.round(a.x), Math.round(a.y), Math.round(a.z));
 	}
 
 	public static Vector3f toVector3f(Vector3i a) {
