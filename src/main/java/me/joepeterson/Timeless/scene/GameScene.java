@@ -174,19 +174,39 @@ public class GameScene extends WorldScene {
 				this.hud = gameHUD;
 
 				// Seeing which blocks to render
-				// TODO: Make more efficient by looping through the list by position, and not looping through all blocks
 				blocksToRender.clear();
+				Vector3f playerPos = player.getPosition();
+				
+				int viewDistance = 30;
+				
+				for(int x = (int) playerPos.x - viewDistance; x < (int) playerPos.x + viewDistance; x++) {
+					for(int y = (int) playerPos.y - viewDistance; y < (int) playerPos.y + viewDistance; y++) {
+						for(int z = (int) playerPos.z - viewDistance; z < (int) playerPos.z + viewDistance; z++) {
+							Vector3i blockPosition = new Vector3i(x, y, z);
 
-				for(Vector3i position : world.getBlocks().keySet()) {
-					float distance = Vector.distance(Vector.toVector3f(position), player.getPosition());
-					if(distance <= 30.f) {
-						Block block = world.getBlocks().get(position);
+							if(world.getBlocks().containsKey(blockPosition)) { // Block exists
+								Block block = world.getBlocks().get(blockPosition);
 
-						if(block.mesh.visible) {
-							blocksToRender.put(position, block);
+								if(block.mesh.visible) {
+									blocksToRender.put(blockPosition, block);
+								}
+							}
 						}
-					}
+					}	
 				}
+
+//				Less efficient way of checking for blocks to render
+//
+//				for(Vector3i position : world.getBlocks().keySet()) {
+//					float distance = Vector.distance(Vector.toVector3f(position), player.getPosition());
+//					if(distance <= 30.f) {
+//						Block block = world.getBlocks().get(position);
+//
+//						if(block.mesh.visible) {
+//							blocksToRender.put(position, block);
+//						}
+//					}
+//				}
 
 				entitiesToRender.clear();
 				entitiesToRender.addAll(world.getEntities());
