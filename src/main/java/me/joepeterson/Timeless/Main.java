@@ -14,6 +14,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class Main {
 	public void run() {
+		System.out.println("Working Directory = " + System.getProperty("user.dir"));
 		System.out.println("LWJGL " + Version.getVersion());
 
 		try {

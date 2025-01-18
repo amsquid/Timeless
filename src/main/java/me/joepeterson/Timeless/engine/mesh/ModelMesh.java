@@ -5,6 +5,8 @@ import me.joepeterson.Timeless.engine.util.Utils;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.assimp.*;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
@@ -22,17 +24,10 @@ public class ModelMesh extends BaseMesh {
 	public ModelMesh(String modelPath, Texture texture) throws Exception {
 		super();
 
-		URL modelURL = Thread.currentThread().getContextClassLoader().getResource(modelPath);
+		String userDir = System.getProperty("user.dir");
+		this.modelPath = userDir + "/" + modelPath;
 
-		if(modelURL == null) {
-			throw new Exception("Couldn't find model with path " + modelPath);
-		}
-
-		this.modelPath = modelURL.getPath();
-
-		if(System.getProperties().getProperty("os.name").split(" ")[0].equals("Windows")) {
-			this.modelPath = this.modelPath.replaceFirst("/", "");
-		}
+		System.out.println(this.modelPath);
 
 		loadModelFile(this.modelPath);
 

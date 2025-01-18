@@ -10,8 +10,6 @@ import me.joepeterson.Timeless.engine.entity.MeshEntity;
 import me.joepeterson.Timeless.engine.hud.FullscreenHUDItem;
 import me.joepeterson.Timeless.engine.hud.HUD;
 import me.joepeterson.Timeless.engine.hud.HUDItem;
-import me.joepeterson.Timeless.engine.inventory.Item;
-import me.joepeterson.Timeless.engine.inventory.ItemStack;
 import me.joepeterson.Timeless.engine.mesh.ModelMesh;
 import me.joepeterson.Timeless.engine.scene.WorldScene;
 import me.joepeterson.Timeless.engine.texture.Texture;
@@ -101,7 +99,7 @@ public class GameScene extends WorldScene {
 		loadingHUD = new HUD();
 
 		try {
-			loadingHUD.addHUDItem(new FullscreenHUDItem(new Texture("textures/ui/loading_screen.png")));
+			loadingHUD.addHUDItem(new FullscreenHUDItem(new Texture("assets/textures/ui/loading_screen.png")));
 		} catch(IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -121,10 +119,10 @@ public class GameScene extends WorldScene {
 			Vector2f oneOver = new Vector2f(scale.x + offset, scale.y + offset); // idk what else to name this :I
 			Vector2f slotOneOver = new Vector2f(slotScale.x + offset, slotScale.y + offset);
 
-			slotTexture = new Texture("textures/ui/slot.png");
-			selectedSlotTexture = new Texture("textures/ui/slot_selected.png");
+			slotTexture = new Texture("assets/textures/ui/slot.png");
+			selectedSlotTexture = new Texture("assets/textures/ui/slot_selected.png");
 
-			Texture emptyTexture = new Texture("textures/item/empty.png");
+			Texture emptyTexture = new Texture("assets/textures/item/empty.png");
 
 			// Slots
 			slotStart = gameHUD.getHUDItems().size();
@@ -226,7 +224,7 @@ public class GameScene extends WorldScene {
 
 				System.out.println("Generated World");
 
-				ModelMesh modelMesh = new ModelMesh("models/testing_entity.dae", new Texture("textures/model/blue_rock.png"));
+				ModelMesh modelMesh = new ModelMesh("assets/models/testing_entity.dae", new Texture("assets/textures/model/blue_rock.png"));
 				debugEntity = new MeshEntity(modelMesh);
 
 				world.addEntity(debugEntity);

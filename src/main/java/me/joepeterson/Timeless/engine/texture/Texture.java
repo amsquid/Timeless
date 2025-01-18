@@ -2,6 +2,8 @@ package me.joepeterson.Timeless.engine.texture;
 
 import de.matthiasmann.twl.utils.PNGDecoder;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -20,7 +22,11 @@ public class Texture {
 	PNGDecoder decoder;
 
 	public Texture(String texturePath) throws IOException {
-		InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(texturePath);
+		String userDir = System.getProperty("user.dir");
+		String absPath = userDir + "/" + texturePath;
+
+		File file = new File(absPath);
+		FileInputStream is = new FileInputStream(file);
 
 		decoder = new PNGDecoder(is);
 

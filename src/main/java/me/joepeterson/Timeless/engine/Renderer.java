@@ -18,6 +18,7 @@ public class Renderer {
 
 	public void init() throws Exception {
 		// 3D Shader
+		System.out.println("Setting up 3D Shader");
 		d3Shader = new Shader();
 
 		d3Shader.renderingType = RenderingType.D3;
@@ -33,6 +34,7 @@ public class Renderer {
 		d3Shader.setUniform("tex", 0);
 
 		// 2D Shader
+		System.out.println("Setting up 2D Shader");
 		d2Shader = new Shader();
 
 		d2Shader.renderingType = RenderingType.D2;
@@ -91,7 +93,7 @@ public class Renderer {
 	}
 
 	public void cleanup() {
-		activeShader.unbind();
+		if(activeShader != null) activeShader.unbind();
 
 		d2Shader.cleanup();
 		d3Shader.cleanup();

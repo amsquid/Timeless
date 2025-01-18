@@ -10,7 +10,7 @@ public class RockBlock extends BreakableBlock {
 	public RockBlock(Vector3i position) {
 		Texture texture = null;
 		try {
-			texture = new Texture("textures/block/rock.png");
+			texture = new Texture("assets/textures/block/rock.png");
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

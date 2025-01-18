@@ -38,10 +38,11 @@ public class Game implements IGameLogic {
 
 		window.update();
 
+		System.out.println("Setting up renderer");
+		renderer.init();
+
 		this.activeScene = new GameScene(renderer, new SpaceWorld());
 		activeScene.init(window);
-
-		renderer.init();
 	}
 
 	@Override
