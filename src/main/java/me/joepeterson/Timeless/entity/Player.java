@@ -15,6 +15,8 @@ public class Player extends LivingEntity {
 
 	private Inventory inventory = new Inventory();
 
+	public boolean inventoryOpen = false;
+
 	public void setScale(float scale) {
 		this.scale = scale;
 	}
@@ -38,6 +40,8 @@ public class Player extends LivingEntity {
 	}
 
 	public void moveAndCollide(Vector3f velocity, World world) {
+		if(inventoryOpen) return; // Don't move if inventory is open
+
 		// Future Velocities
 		Vector3f futureForwardVelocity = new Vector3f(0.0f, 0.0f, velocity.z);
 		Vector3f futureUpVelocity = new Vector3f(0.0f, velocity.y, 0.0f);

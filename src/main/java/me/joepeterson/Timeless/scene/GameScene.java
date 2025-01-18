@@ -34,8 +34,10 @@ public class GameScene extends WorldScene {
 	WorldBuilder worldBuilder;
 
 	Player player;
+
 	HUD gameHUD;
 	HUD loadingHUD;
+	HUD inventoryHUD;
 
 	boolean loadingWorld = true;
 
@@ -55,6 +57,7 @@ public class GameScene extends WorldScene {
 
 	boolean brokenBlock = false;
 	boolean placedBlock = false;
+	boolean openingInventory = false;
 
 	Window window;
 
@@ -337,6 +340,23 @@ public class GameScene extends WorldScene {
 		if(slotChanged) {
 			updateSlots();
 		}
+
+		// Opening Inventory
+		if(window.isKeyPressed(GLFW_KEY_TAB) && !openingInventory) {
+			player.inventoryOpen = !player.inventoryOpen;
+
+			if(player.inventoryOpen) {
+				glfwSetInputMode(window.windowHandle, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			} else {
+				glfwSetInputMode(window.windowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			}
+
+			openingInventory = true;
+		}
+
+		if(window.isKeyReleased(GLFW_KEY_TAB)) {
+			openingInventory = false;
+		}
 	}
 
 	public void mouseInput() {
@@ -345,13 +365,18 @@ public class GameScene extends WorldScene {
 		// Camera rotation
 		Vector2d mousePosNormalized = new Vector2d(window.getMousePos().x / window.width - .5d, window.getMousePos().y / window.height - .5d);
 		Vector2d mouseDelta = new Vector2d(mousePosNormalized.x - lastMousePosition.x, mousePosNormalized.y - lastMousePosition.y);
-		lastMousePosition = mousePosNormalized;
 
-		camera.rotate((float) mouseDelta.y * dt * mouseSensitivity, (float) mouseDelta.x * dt * mouseSensitivity, 0.0f);
+		if(!player.inventoryOpen) {
+			lastMousePosition = mousePosNormalized;
 
-		float xRotClamp = Math.clamp(camera.getRotation().x, -90.0f, 90.0f);
+			camera.rotate((float) mouseDelta.y * dt * mouseSensitivity, (float) mouseDelta.x * dt * mouseSensitivity, 0.0f);
 
-		camera.setRotation(xRotClamp, camera.getRotation().y, camera.getRotation().z);
+			float xRotClamp = Math.clamp(camera.getRotation().x, -90.0f, 90.0f);
+
+			camera.setRotation(xRotClamp, camera.getRotation().y, camera.getRotation().z);
+		} else {
+			lastMousePosition = mousePosNormalized;
+		}
 
 		// Mouse Down
 		Vector3f lookingPosition = camera.getLookingPosition(world, 5, .01f);
