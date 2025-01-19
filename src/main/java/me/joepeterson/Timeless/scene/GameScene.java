@@ -55,7 +55,7 @@ public class GameScene extends WorldScene {
 
 	boolean brokenBlock = false;
 	boolean placedBlock = false;
-	boolean openingInventory = false;
+	boolean mouseUnlocked = false;
 
 	Window window;
 
@@ -360,7 +360,7 @@ public class GameScene extends WorldScene {
 		}
 
 		// Opening Inventory
-		if(window.isKeyPressed(GLFW_KEY_TAB) && !openingInventory) {
+		if(window.isKeyPressed(GLFW_KEY_TAB) && !mouseUnlocked) {
 			player.inventoryOpen = !player.inventoryOpen;
 
 			if(player.inventoryOpen) {
@@ -369,11 +369,11 @@ public class GameScene extends WorldScene {
 				glfwSetInputMode(window.windowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 			}
 
-			openingInventory = true;
+			mouseUnlocked = true;
 		}
 
 		if(window.isKeyReleased(GLFW_KEY_TAB)) {
-			openingInventory = false;
+			mouseUnlocked = false;
 		}
 	}
 
