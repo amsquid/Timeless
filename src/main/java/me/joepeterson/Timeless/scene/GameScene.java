@@ -244,10 +244,9 @@ public class GameScene extends WorldScene {
 
 				System.out.println("Generated World");
 
-				ModelMesh modelMesh = new ModelMesh("assets/models/testing_entity.dae", new Texture("assets/textures/model/blue_rock.png"));
-				debugEntity = new MeshEntity(modelMesh);
-
-				world.addEntity(debugEntity);
+//				ModelMesh modelMesh = new ModelMesh("assets/models/testing_entity.dae", new Texture("assets/textures/model/blue_rock.png"));
+//				debugEntity = new MeshEntity(modelMesh);
+//				world.addEntity(debugEntity);
 
 				this.hud = gameHUD;
 
