@@ -10,7 +10,6 @@ import me.joepeterson.Timeless.engine.entity.MeshEntity;
 import me.joepeterson.Timeless.engine.hud.FullscreenHUDItem;
 import me.joepeterson.Timeless.engine.hud.HUD;
 import me.joepeterson.Timeless.engine.hud.HUDItem;
-import me.joepeterson.Timeless.engine.mesh.ModelMesh;
 import me.joepeterson.Timeless.engine.scene.WorldScene;
 import me.joepeterson.Timeless.engine.texture.Texture;
 import me.joepeterson.Timeless.engine.util.Vector;
