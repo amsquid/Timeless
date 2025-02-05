@@ -11,7 +11,7 @@ public class Air extends Material {
 
 	static {
 		try {
-			texture = new Texture("assets/textures/empty.png");
+			texture = new Texture("assets/textures/item/empty.png");
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

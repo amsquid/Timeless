@@ -1,5 +1,6 @@
 package me.joepeterson.Timeless.engine.block;
 
+import me.joepeterson.Timeless.engine.inventory.Material;
 import me.joepeterson.Timeless.engine.texture.Texture;
 import org.joml.Vector3i;
 
@@ -7,6 +8,8 @@ public class BreakableBlock extends Block {
 
 	float health = 1.0f;
 	float breakMul = 0.1f;
+
+	private Material giveMaterial;
 
 	public BreakableBlock(Vector3i position, Texture texture, float breakMul) {
 		super(position, texture);
@@ -16,6 +19,16 @@ public class BreakableBlock extends Block {
 
 	public BreakableBlock(Vector3i position, Texture texture) {
 		super(position, texture);
+		this.giveMaterial = null;
+	}
+
+	public BreakableBlock(Vector3i position, Texture texture, Material giveMaterial) {
+		super(position, texture);
+		this.giveMaterial = giveMaterial;
+	}
+
+	public Material getGiveMaterial() {
+		return giveMaterial;
 	}
 
 	public void destroy() {}

@@ -5,6 +5,7 @@ import me.joepeterson.Timeless.engine.Renderer;
 import me.joepeterson.Timeless.engine.Window;
 import me.joepeterson.Timeless.engine.WorldBuilder;
 import me.joepeterson.Timeless.engine.block.Block;
+import me.joepeterson.Timeless.engine.block.BreakableBlock;
 import me.joepeterson.Timeless.engine.entity.Camera;
 import me.joepeterson.Timeless.engine.entity.MeshEntity;
 import me.joepeterson.Timeless.engine.hud.FullscreenHUDItem;
@@ -94,8 +95,8 @@ public class GameScene extends WorldScene {
 		camera = new Camera(window);
 		player = new Player(0.005f);
 
-		player.giveItem(new Rock(), 1);
-		player.giveItem(new Dirt(), 1);
+		player.giveItem(new Rock(), 5);
+		player.giveItem(new Dirt(), 5);
 
 		// Loading HUD
 		loadingHUD = new HUD();
@@ -406,7 +407,7 @@ public class GameScene extends WorldScene {
 			Vector3i lookingBlockPosition = Vector.toVector3iFloor(lookingPosition);
 			Block lookingBlock = world.getBlocks().get(lookingBlockPosition);
 
-			if(lookingBlock != null) {
+			if(lookingBlock instanceof BreakableBlock) {
 				if (!world.deleteBlock(lookingBlock.position)) System.out.println("Couldn't delete block");
 
 				world.fixFacesAround(lookingBlockPosition, 1);
@@ -432,6 +433,7 @@ public class GameScene extends WorldScene {
 
 					BlockMaterial material = (BlockMaterial) item.getMaterial();
 					Block block = null;
+
 					try {
 						block = material.getBlock().getClass().getDeclaredConstructor(Vector3i.class).newInstance(newBlockPosition);
 					} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
@@ -441,6 +443,13 @@ public class GameScene extends WorldScene {
 					if(!block.boundingBox.collidesWith(new Vector3f(), player.getBoundingBox())) {
 						world.addBlock(block);
 						world.fixFacesAround(newBlockPosition, 1);
+
+						player.getInventory().get(selectedSlot).addAmount(-1);
+
+						if(player.getInventory().get(selectedSlot).getAmount() <= 0) {
+							Item air = new Item(new Air(), 1);
+							player.getInventory().set(selectedSlot, air);
+						}
 					}
 				}
 
