@@ -215,7 +215,7 @@ public class GameScene extends WorldScene {
 
 				// Item setup in HUD
 				for(int i = 0; i < 6; i++) {
-						if(i > player.getInventory().size() - 1 || player.getInventory().get(i).getMaterial() instanceof Air) {
+					if(i > player.getInventory().size() - 1 || player.getInventory().get(i).getMaterial() instanceof Air) {
 						gameHUD.getHUDItems().get(itemStart + i).shouldRender = false;
 
 						continue;
