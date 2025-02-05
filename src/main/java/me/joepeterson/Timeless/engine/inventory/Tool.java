@@ -2,7 +2,7 @@ package me.joepeterson.Timeless.engine.inventory;
 
 import me.joepeterson.Timeless.engine.texture.Texture;
 
-public class Tool extends Item {
+public class Tool extends Material {
 	private double durability;
 	private final double durabilityMax;
 

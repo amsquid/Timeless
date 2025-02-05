@@ -2,18 +2,19 @@ package me.joepeterson.Timeless.entity;
 
 import me.joepeterson.Timeless.engine.BoundingBox;
 import me.joepeterson.Timeless.engine.entity.LivingEntity;
-import me.joepeterson.Timeless.engine.inventory.Inventory;
+import me.joepeterson.Timeless.engine.inventory.Item;
+import me.joepeterson.Timeless.engine.inventory.Material;
 import me.joepeterson.Timeless.engine.util.Vector;
 import me.joepeterson.Timeless.engine.world.World;
 import org.joml.Vector3f;
+
+import java.util.ArrayList;
 
 public class Player extends LivingEntity {
 
 	private float scale = 1.0f;
 
 	public boolean sprinting = false;
-
-	private Inventory inventory = new Inventory();
 
 	public boolean inventoryOpen = false;
 
@@ -59,5 +60,15 @@ public class Player extends LivingEntity {
 
 		// Updating velocities based on collisions
 		setVelocity(velocity.x, velocity.y, velocity.z);
+	}
+
+	public void giveItem(Material material, int amount) {
+		Item item = new Item(material, amount);
+
+		getInventory().add(item);
+	}
+
+	public void giveItem(Item item) {
+		getInventory().add(item);
 	}
 }

@@ -1,6 +1,8 @@
 package me.joepeterson.Timeless.engine.entity;
 
-import me.joepeterson.Timeless.engine.inventory.Inventory;
+import me.joepeterson.Timeless.engine.inventory.Item;
+
+import java.util.ArrayList;
 
 public class LivingEntity extends Entity {
 
@@ -9,7 +11,7 @@ public class LivingEntity extends Entity {
 	private float damage;
 	private float speed;
 
-	private Inventory inventory;
+	ArrayList<Item> inventory;
 
 	public float getHealth() {
 		return health;
@@ -39,7 +41,7 @@ public class LivingEntity extends Entity {
 		return speed;
 	}
 
-	public Inventory getInventory() {
+	public ArrayList<Item> getInventory() {
 		return this.inventory;
 	}
 
@@ -50,7 +52,7 @@ public class LivingEntity extends Entity {
 		this.health = 100;
 		this.maxHealth = 100;
 		this.damage = 1;
-		this.inventory = new Inventory();
+		this.inventory = new ArrayList<>();
 	}
 
 }

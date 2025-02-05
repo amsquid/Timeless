@@ -10,13 +10,18 @@ import me.joepeterson.Timeless.engine.entity.MeshEntity;
 import me.joepeterson.Timeless.engine.hud.FullscreenHUDItem;
 import me.joepeterson.Timeless.engine.hud.HUD;
 import me.joepeterson.Timeless.engine.hud.HUDItem;
+import me.joepeterson.Timeless.engine.inventory.BlockMaterial;
+import me.joepeterson.Timeless.engine.inventory.Material;
+import me.joepeterson.Timeless.engine.inventory.Item;
 import me.joepeterson.Timeless.engine.scene.WorldScene;
 import me.joepeterson.Timeless.engine.texture.Texture;
 import me.joepeterson.Timeless.engine.util.Vector;
 import me.joepeterson.Timeless.engine.world.World;
 import me.joepeterson.Timeless.entity.Player;
 import me.joepeterson.Timeless.hud.Crosshair;
-import me.joepeterson.Timeless.item.Rock;
+import me.joepeterson.Timeless.material.Air;
+import me.joepeterson.Timeless.material.Dirt;
+import me.joepeterson.Timeless.material.Rock;
 import me.joepeterson.Timeless.world.SpaceWorld;
 import org.joml.Vector2d;
 import org.joml.Vector2f;
@@ -24,6 +29,7 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -88,11 +94,8 @@ public class GameScene extends WorldScene {
 		camera = new Camera(window);
 		player = new Player(0.005f);
 
-		try {
-			player.getInventory().addItem(new Rock(), 1);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		player.giveItem(new Rock(), 1);
+		player.giveItem(new Dirt(), 1);
 
 		// Loading HUD
 		loadingHUD = new HUD();
@@ -123,18 +126,6 @@ public class GameScene extends WorldScene {
 
 			Texture emptyTexture = new Texture("assets/textures/item/empty.png");
 
-			// Slots
-			slotStart = gameHUD.getHUDItems().size();
-
-			for(int i = 0; i < 6; i++) {
-				float x = (.5f - (slotOneOver.x * 3)) + (slotOneOver.x * (i)) + offset;
-				float y = 1.0f - slotOneOver.y;
-
-				HUDItem slot = new HUDItem(slotTexture, new Vector2f(x, y), slotScale);
-
-				gameHUD.addHUDItem(slot);
-			}
-
 			// Items
 			itemStart = gameHUD.getHUDItems().size();
 
@@ -143,6 +134,18 @@ public class GameScene extends WorldScene {
 				float y = 1.0f - oneOver.y;
 
 				HUDItem slot = new HUDItem(emptyTexture, new Vector2f(x, y), scale);
+
+				gameHUD.addHUDItem(slot);
+			}
+
+			// Slots
+			slotStart = gameHUD.getHUDItems().size();
+
+			for(int i = 0; i < 6; i++) {
+				float x = (.5f - (slotOneOver.x * 3)) + (slotOneOver.x * (i)) + offset;
+				float y = 1.0f - slotOneOver.y;
+
+				HUDItem slot = new HUDItem(slotTexture, new Vector2f(x, y), slotScale);
 
 				gameHUD.addHUDItem(slot);
 			}
@@ -160,7 +163,7 @@ public class GameScene extends WorldScene {
 		this.worldBuilder = new WorldBuilder(this.world, window);
 		this.worldBuilder.generateWorld();
 
-		updateSlots();
+        updateSlots();
 	}
 
 	@Override
@@ -212,18 +215,19 @@ public class GameScene extends WorldScene {
 
 				// Item setup in HUD
 				for(int i = 0; i < 6; i++) {
-					if(i > player.getInventory().getItems().size() - 1) {
+						if(i > player.getInventory().size() - 1 || player.getInventory().get(i).getMaterial() instanceof Air) {
 						gameHUD.getHUDItems().get(itemStart + i).shouldRender = false;
 
 						continue;
 					}
-//					ItemStack itemStack = player.getInventory().getItems().get(i);
-//					Item item = itemStack.getItem();
-//					Texture itemTexture = item.getTexture();
-//
-//					HUDItem hudItem = gameHUD.getHUDItems().get(itemStart + i);
-//					hudItem.refreshTexture(itemTexture);
-//					hudItem.shouldRender = true;
+
+					Item itemStack = player.getInventory().get(i);
+					Material item = itemStack.getMaterial();
+					Texture itemTexture = item.getTexture();
+
+					HUDItem hudItem = gameHUD.getHUDItems().get(itemStart + i);
+					hudItem.refreshTexture(itemTexture);
+					hudItem.shouldRender = true;
 				}
 			}
 
@@ -412,31 +416,41 @@ public class GameScene extends WorldScene {
 		}
 
 		if(window.isMouseButtonPressed(GLFW_MOUSE_BUTTON_RIGHT) && !placedBlock) {
-			Vector3i lookingBlockPosition = Vector.toVector3iFloor(lookingPosition);
-			Block lookingBlock = world.getBlocks().get(lookingBlockPosition);
-			Vector3f face = Vector.getNormalBlockFace(lookingPosition, lookingBlock);
+			if(selectedSlot < player.getInventory().size() && player.getInventory().get(selectedSlot).getMaterial() instanceof BlockMaterial) {
+				Item item = player.getInventory().get(selectedSlot);
 
-			if(face == null) {
-				System.err.println("Invalid face at looking position");
-			} else {
-				Vector3i newBlockPosition = Vector.toVector3iRound(
-						Vector.addVectors(face.mul(.5f), lookingBlockPosition)
-				);
+				Vector3i lookingBlockPosition = Vector.toVector3iFloor(lookingPosition);
+				Block lookingBlock = world.getBlocks().get(lookingBlockPosition);
+				Vector3f face = Vector.getNormalBlockFace(lookingPosition, lookingBlock);
 
-				RockBlock rockBlock = new RockBlock(newBlockPosition);
+				if(face == null) {
+					System.err.println("Invalid face at looking position");
+				} else {
+					Vector3i newBlockPosition = Vector.toVector3iRound(
+							Vector.addVectors(face.mul(.5f), lookingBlockPosition)
+					);
 
-				if(!rockBlock.boundingBox.collidesWith(new Vector3f(), player.getBoundingBox())) {
-					world.addBlock(rockBlock);
-					world.fixFacesAround(newBlockPosition, 1);
+					BlockMaterial material = (BlockMaterial) item.getMaterial();
+					Block block = null;
+					try {
+						block = material.getBlock().getClass().getDeclaredConstructor(Vector3i.class).newInstance(newBlockPosition);
+					} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+						throw new RuntimeException(e);
+					}
+
+					if(!block.boundingBox.collidesWith(new Vector3f(), player.getBoundingBox())) {
+						world.addBlock(block);
+						world.fixFacesAround(newBlockPosition, 1);
+					}
 				}
-			}
 
-			placedBlock = true;
+				placedBlock = true;
+			}
 		}
 
 		// Mouse Up
 		if(window.isMouseButtonReleased(GLFW_MOUSE_BUTTON_LEFT)) {
-			brokenBlock = false;
+				brokenBlock = false;
 		}
 
 		if(window.isMouseButtonReleased(GLFW_MOUSE_BUTTON_RIGHT)) {

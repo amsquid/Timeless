@@ -1,27 +1,30 @@
 package me.joepeterson.Timeless.engine.inventory;
 
-import me.joepeterson.Timeless.engine.texture.Texture;
-
 public class Item {
-	private final int itemStackSize;
-	private final String name;
-	private final Texture texture;
+    private int amount;
+    protected Material material;
 
-	public Item(int itemStackSize, String name, Texture texture) {
-		this.itemStackSize = itemStackSize;
-		this.name = name;
-		this.texture = texture;
-	}
+    public Item(Material material) {
+        this.material = material;
+        this.amount = 1;
+    }
 
-	public int getItemStackSize() {
-		return itemStackSize;
-	}
+    public Item(Material material, int amount) {
+        this.material = material;
+        this.amount = amount;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public int getAmount() {
+        return amount;
+    }
 
-	public Texture getTexture() {
-		return texture;
-	}
+    public Material getMaterial() {
+        return this.material;
+    }
+
+    public boolean addAmount(int amount) {
+        if ((this.amount + amount) > material.getStackSize()) return false;
+        this.amount += amount;
+        return true;
+    }
 }
