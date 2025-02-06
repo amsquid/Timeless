@@ -1,6 +1,7 @@
 package me.joepeterson.Timeless.inventory;
 
 import me.joepeterson.Timeless.block.DirtBlock;
+import me.joepeterson.Timeless.block.GrassBlock;
 import me.joepeterson.Timeless.block.RockBlock;
 import me.joepeterson.Timeless.engine.block.Block;
 import me.joepeterson.Timeless.engine.texture.Texture;
@@ -9,7 +10,8 @@ import org.joml.Vector3i;
 public enum Material {
 	AIR("air", new Texture("assets/textures/item/empty.png")),
 	DIRT("Dirt", new Texture("assets/textures/item/dirt.png"), 999, new DirtBlock(new Vector3i())),
-	ROCK("Rock", new Texture("assets/textures/item/rock.png"), 999, new RockBlock(new Vector3i()));
+	ROCK("Rock", new Texture("assets/textures/item/rock.png"), 999, new RockBlock(new Vector3i())),
+	GRASS("Grass", new Texture("assets/textures/item/grass.png"), 999, new GrassBlock(new Vector3i()));
 
 	public final String displayName;
 	public final Texture texture;

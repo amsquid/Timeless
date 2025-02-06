@@ -86,9 +86,6 @@ public class GameScene extends WorldScene {
 		camera = new Camera(window);
 		player = new Player(0.005f);
 
-		player.giveItem(Material.ROCK, 5);
-		player.giveItem(Material.DIRT, 5);
-
 		// Loading HUD
 		loadingHUD = new HUD();
 

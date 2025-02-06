@@ -27,15 +27,18 @@ public class SpaceWorld extends World {
 	private Map<Vector3i, Class<?>> createAsteroid(Vector3i position, int size) {
 		Map<Vector3i, Class<?>> blocks = new HashMap<>();
 
+		Class<?> blockToPlace = RockBlock.class;
+
+		int random = (int) (Math.random() * 2);
+
+		if(random == 1) {
+			blockToPlace = DirtBlock.class;
+		}
+
 		for(int x = position.x - size; x <= position.x + size; x++) {
 			for(int y = position.y - size; y <= position.y + size; y++) {
 				for(int z = position.z - size; z <= position.z + size; z++) {
 					Vector3i pos = new Vector3i(x, y, z);
-					Class<?> blockToPlace = RockBlock.class;
-
-					if(x == position.x - size || x == position.x + size || y == position.y - size || y == position.y + size || z == position.z - size || z == position.z + size) {
-						blockToPlace = DirtBlock.class;
-					}
 
 					blocks.put(pos, blockToPlace);
 				}
