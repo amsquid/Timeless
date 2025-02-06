@@ -1,4 +1,4 @@
-package me.joepeterson.Timeless.engine.inventory;
+package me.joepeterson.Timeless.inventory;
 
 public class Item {
     private int amount;
@@ -23,7 +23,7 @@ public class Item {
     }
 
     public boolean addAmount(int amount) {
-        if ((this.amount + amount) > material.getStackSize()) return false;
+        if ((this.amount + amount) > material.stackSize) return false;
         this.amount += amount;
         return true;
     }

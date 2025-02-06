@@ -1,7 +1,8 @@
-package me.joepeterson.Timeless.engine.block;
+package me.joepeterson.Timeless.block;
 
-import me.joepeterson.Timeless.engine.inventory.Material;
+import me.joepeterson.Timeless.engine.block.Block;
 import me.joepeterson.Timeless.engine.texture.Texture;
+import me.joepeterson.Timeless.inventory.Material;
 import org.joml.Vector3i;
 
 public class BreakableBlock extends Block {

@@ -5,24 +5,20 @@ import me.joepeterson.Timeless.engine.Renderer;
 import me.joepeterson.Timeless.engine.Window;
 import me.joepeterson.Timeless.engine.WorldBuilder;
 import me.joepeterson.Timeless.engine.block.Block;
-import me.joepeterson.Timeless.engine.block.BreakableBlock;
+import me.joepeterson.Timeless.block.BreakableBlock;
 import me.joepeterson.Timeless.engine.entity.Camera;
 import me.joepeterson.Timeless.engine.entity.MeshEntity;
 import me.joepeterson.Timeless.engine.hud.FullscreenHUDItem;
 import me.joepeterson.Timeless.engine.hud.HUD;
 import me.joepeterson.Timeless.engine.hud.HUDItem;
-import me.joepeterson.Timeless.engine.inventory.BlockMaterial;
-import me.joepeterson.Timeless.engine.inventory.Material;
-import me.joepeterson.Timeless.engine.inventory.Item;
+import me.joepeterson.Timeless.inventory.Item;
 import me.joepeterson.Timeless.engine.scene.WorldScene;
 import me.joepeterson.Timeless.engine.texture.Texture;
 import me.joepeterson.Timeless.engine.util.Vector;
 import me.joepeterson.Timeless.engine.world.World;
 import me.joepeterson.Timeless.entity.Player;
 import me.joepeterson.Timeless.hud.Crosshair;
-import me.joepeterson.Timeless.material.Air;
-import me.joepeterson.Timeless.material.Dirt;
-import me.joepeterson.Timeless.material.Rock;
+import me.joepeterson.Timeless.inventory.Material;
 import me.joepeterson.Timeless.world.SpaceWorld;
 import org.joml.Vector2d;
 import org.joml.Vector2f;
@@ -95,17 +91,13 @@ public class GameScene extends WorldScene {
 		camera = new Camera(window);
 		player = new Player(0.005f);
 
-		player.giveItem(new Rock(), 5);
-		player.giveItem(new Dirt(), 5);
+		player.giveItem(Material.ROCK, 5);
+		player.giveItem(Material.DIRT, 5);
 
 		// Loading HUD
 		loadingHUD = new HUD();
 
-		try {
-			loadingHUD.addHUDItem(new FullscreenHUDItem(new Texture("assets/textures/ui/loading_screen.png")));
-		} catch(IOException e) {
-			throw new RuntimeException(e);
-		}
+		loadingHUD.addHUDItem(new FullscreenHUDItem(new Texture("assets/textures/ui/loading_screen.png")));
 
 		// Game HUD
 		gameHUD = new HUD();
@@ -216,7 +208,7 @@ public class GameScene extends WorldScene {
 
 				// Item setup in HUD
 				for(int i = 0; i < 6; i++) {
-					if(i > player.getInventory().size() - 1 || player.getInventory().get(i).getMaterial() instanceof Air) {
+					if(i > player.getInventory().size() - 1 || player.getInventory().get(i).getMaterial() == Material.AIR) {
 						gameHUD.getHUDItems().get(itemStart + i).shouldRender = false;
 
 						continue;
@@ -224,7 +216,7 @@ public class GameScene extends WorldScene {
 
 					Item itemStack = player.getInventory().get(i);
 					Material item = itemStack.getMaterial();
-					Texture itemTexture = item.getTexture();
+					Texture itemTexture = item.texture;
 
 					HUDItem hudItem = gameHUD.getHUDItems().get(itemStart + i);
 					hudItem.refreshTexture(itemTexture);
@@ -405,19 +397,27 @@ public class GameScene extends WorldScene {
 
 		if(window.isMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT) && !brokenBlock) {
 			Vector3i lookingBlockPosition = Vector.toVector3iFloor(lookingPosition);
-			Block lookingBlock = world.getBlocks().get(lookingBlockPosition);
 
-			if(lookingBlock instanceof BreakableBlock) {
-				if (!world.deleteBlock(lookingBlock.position)) System.out.println("Couldn't delete block");
+			if(world.getBlocks().get(lookingBlockPosition) instanceof BreakableBlock) {
+				BreakableBlock block = (BreakableBlock) world.getBlocks().get(lookingBlockPosition);
 
-				world.fixFacesAround(lookingBlockPosition, 1);
+				if (!world.deleteBlock(block.position)) {
+					System.out.println("Couldn't delete block");
+				} else {
+					world.fixFacesAround(block.position, 1);
+
+					Material material = block.getGiveMaterial();
+
+					if(material != null)
+						player.giveItem(material, 1);
+				}
 			}
 
 			brokenBlock = true;
 		}
 
 		if(window.isMouseButtonPressed(GLFW_MOUSE_BUTTON_RIGHT) && !placedBlock) {
-			if(selectedSlot < player.getInventory().size() && player.getInventory().get(selectedSlot).getMaterial() instanceof BlockMaterial) {
+			if(selectedSlot < player.getInventory().size() && player.getInventory().get(selectedSlot).getMaterial().blockToPlace != null) {
 				Item item = player.getInventory().get(selectedSlot);
 
 				Vector3i lookingBlockPosition = Vector.toVector3iFloor(lookingPosition);
@@ -431,11 +431,12 @@ public class GameScene extends WorldScene {
 							Vector.addVectors(face.mul(.5f), lookingBlockPosition)
 					);
 
-					BlockMaterial material = (BlockMaterial) item.getMaterial();
+					Material material = item.getMaterial();
 					Block block = null;
 
 					try {
-						block = material.getBlock().getClass().getDeclaredConstructor(Vector3i.class).newInstance(newBlockPosition);
+						assert material.blockToPlace != null;
+						block = material.blockToPlace.getClass().getDeclaredConstructor(Vector3i.class).newInstance(newBlockPosition);
 					} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
 						throw new RuntimeException(e);
 					}
@@ -447,7 +448,7 @@ public class GameScene extends WorldScene {
 						player.getInventory().get(selectedSlot).addAmount(-1);
 
 						if(player.getInventory().get(selectedSlot).getAmount() <= 0) {
-							Item air = new Item(new Air(), 1);
+							Item air = new Item(Material.AIR, 1);
 							player.getInventory().set(selectedSlot, air);
 						}
 					}

@@ -1,14 +1,9 @@
 package me.joepeterson.Timeless.entity;
 
 import me.joepeterson.Timeless.engine.BoundingBox;
-import me.joepeterson.Timeless.engine.entity.LivingEntity;
-import me.joepeterson.Timeless.engine.inventory.Item;
-import me.joepeterson.Timeless.engine.inventory.Material;
 import me.joepeterson.Timeless.engine.util.Vector;
 import me.joepeterson.Timeless.engine.world.World;
 import org.joml.Vector3f;
-
-import java.util.ArrayList;
 
 public class Player extends LivingEntity {
 
@@ -27,7 +22,7 @@ public class Player extends LivingEntity {
 	}
 
 	public Player(float speed) {
-		super(speed);
+		super(speed, 6);
 
 		Vector3f min = Vector.multiplyVector(new Vector3f(-.25f, .0f, -.25f), scale);
 		Vector3f max = Vector.multiplyVector(new Vector3f(.25f, 1.25f, .25f), scale);
@@ -60,15 +55,5 @@ public class Player extends LivingEntity {
 
 		// Updating velocities based on collisions
 		setVelocity(velocity.x, velocity.y, velocity.z);
-	}
-
-	public void giveItem(Material material, int amount) {
-		Item item = new Item(material, amount);
-
-		getInventory().add(item);
-	}
-
-	public void giveItem(Item item) {
-		getInventory().add(item);
 	}
 }
