@@ -1,6 +1,8 @@
 package me.joepeterson.Timeless.world;
 
+import me.joepeterson.Timeless.block.DirtBlock;
 import me.joepeterson.Timeless.block.RockBlock;
+import me.joepeterson.Timeless.engine.block.Block;
 import me.joepeterson.Timeless.engine.world.World;
 import org.joml.Vector3i;
 
@@ -10,10 +12,10 @@ import java.util.Random;
 
 public class SpaceWorld extends World {
 
-	public Map<Vector3i, Integer> generateWorld(long seed) {
+	public Map<Vector3i, Class<?>> generateWorld(long seed) {
 		Random random = new Random(seed);
 
-		Map<Vector3i, Integer> returnBlocks = new HashMap<>();
+		Map<Vector3i, Class<?>> returnBlocks = new HashMap<>();
 
 		for(int i = 0; i < 5; i++) {
 			returnBlocks.putAll(createAsteroid(new Vector3i(random.nextInt(-10, 10), random.nextInt(-10, 10), random.nextInt(-10, 10)), random.nextInt(1, 5)));
@@ -22,16 +24,20 @@ public class SpaceWorld extends World {
 		return returnBlocks;
 	}
 
-	private Map<Vector3i, Integer> createAsteroid(Vector3i position, int size) {
-		Map<Vector3i, Integer> blocks = new HashMap<>();
+	private Map<Vector3i, Class<?>> createAsteroid(Vector3i position, int size) {
+		Map<Vector3i, Class<?>> blocks = new HashMap<>();
 
-		for(int x = position.x - size; x < position.x + size; x++) {
-			for(int y = position.y - size; y < position.y + size; y++) {
-				for(int z = position.z - size; z < position.z + size; z++) {
+		for(int x = position.x - size; x <= position.x + size; x++) {
+			for(int y = position.y - size; y <= position.y + size; y++) {
+				for(int z = position.z - size; z <= position.z + size; z++) {
 					Vector3i pos = new Vector3i(x, y, z);
-					int id = RockBlock.id;
+					Class<?> blockToPlace = RockBlock.class;
 
-					blocks.put(pos, id);
+					if(x == position.x - size || x == position.x + size || y == position.y - size || y == position.y + size || z == position.z - size || z == position.z + size) {
+						blockToPlace = DirtBlock.class;
+					}
+
+					blocks.put(pos, blockToPlace);
 				}
 			}
 		}

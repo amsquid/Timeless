@@ -47,14 +47,19 @@ public class World {
 		return entities;
 	}
 
-	public Map<Vector3i, Integer> generateWorld(long seed) {
+	public Map<Vector3i, Class<?>> generateWorld(long seed) {
 		return new HashMap<>();
 	}
 
-	public void loadWorld(Map<Vector3i, Integer> blocks, Class<?>[] blockDictionary) throws InvocationTargetException, InstantiationException, IllegalAccessException {
+	public void loadWorld(Map<Vector3i, Class<?>> blocks) {
 		for(Vector3i position : blocks.keySet()) {
-			int id = blocks.get(position);
-			Block block = (Block) blockDictionary[id].getDeclaredConstructors()[0].newInstance(position);
+			Class<?> blockClass = blocks.get(position);
+			Block block = null;
+			try {
+				block = (Block) blockClass.getDeclaredConstructor(Vector3i.class).newInstance(position);
+			} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+				throw new RuntimeException(e);
+			}
 
 			addBlock(block);
 		}

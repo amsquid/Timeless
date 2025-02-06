@@ -1,15 +1,10 @@
-package me.joepeterson.Timeless.engine;
+package me.joepeterson.Timeless.engine.world;
 
-import me.joepeterson.Timeless.engine.block.Block;
-import me.joepeterson.Timeless.engine.world.World;
+import me.joepeterson.Timeless.engine.Window;
 import org.joml.Vector3i;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Random;
-
-import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 
 /*
 	The point of this class is to allow for asynchronous world generation to allow for constant event polling during the world creation.
@@ -20,7 +15,7 @@ public class WorldBuilder implements Runnable {
 	private long seed;
 
 	public boolean generatedWorld = false;
-	public Map<Vector3i, Integer> blocksGenerated;
+	public Map<Vector3i, Class<?>> blocksGenerated;
 
 	private Thread generationThread;
 

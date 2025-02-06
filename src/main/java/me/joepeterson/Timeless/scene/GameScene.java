@@ -1,9 +1,8 @@
 package me.joepeterson.Timeless.scene;
 
-import me.joepeterson.Timeless.block.RockBlock;
 import me.joepeterson.Timeless.engine.Renderer;
 import me.joepeterson.Timeless.engine.Window;
-import me.joepeterson.Timeless.engine.WorldBuilder;
+import me.joepeterson.Timeless.engine.world.WorldBuilder;
 import me.joepeterson.Timeless.engine.block.Block;
 import me.joepeterson.Timeless.block.BreakableBlock;
 import me.joepeterson.Timeless.engine.entity.Camera;
@@ -42,10 +41,6 @@ public class GameScene extends WorldScene {
 	boolean loadingWorld = true;
 
 	MeshEntity debugEntity;
-
-	Class<?>[] blocksDictionary = new Class<?>[]{
-			RockBlock.class
-	};
 
 	int itemStart = 0; // Item position in the HUD array
 	int slotStart = 0; // Slot position in the HUD array
@@ -234,7 +229,7 @@ public class GameScene extends WorldScene {
 
 		if(worldBuilder.generatedWorld && loadingWorld) {
 			try {
-				world.loadWorld(worldBuilder.blocksGenerated, blocksDictionary);
+				world.loadWorld(worldBuilder.blocksGenerated);
 
 				glfwSetInputMode(window.windowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
