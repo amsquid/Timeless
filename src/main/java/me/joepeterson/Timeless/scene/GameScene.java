@@ -111,18 +111,6 @@ public class GameScene extends WorldScene {
 
 			Texture emptyTexture = new Texture("assets/textures/item/empty.png");
 
-			// Items
-			itemStart = gameHUD.getHUDItems().size();
-
-			for(int i = 0; i < 6; i++) {
-				float x = (.5f - (oneOver.x * 3)) + (oneOver.x * (i)) + offset;
-				float y = 1.0f - oneOver.y;
-
-				HUDItem slot = new HUDItem(emptyTexture, new Vector2f(x, y), scale);
-
-				gameHUD.addHUDItem(slot);
-			}
-
 			// Slots
 			slotStart = gameHUD.getHUDItems().size();
 
@@ -131,6 +119,18 @@ public class GameScene extends WorldScene {
 				float y = 1.0f - slotOneOver.y;
 
 				HUDItem slot = new HUDItem(slotTexture, new Vector2f(x, y), slotScale);
+
+				gameHUD.addHUDItem(slot);
+			}
+
+			// Items
+			itemStart = gameHUD.getHUDItems().size();
+
+			for(int i = 0; i < 6; i++) {
+				float x = (.5f - (oneOver.x * 3)) + (oneOver.x * (i)) + offset;
+				float y = 1.0f - oneOver.y;
+
+				HUDItem slot = new HUDItem(emptyTexture, new Vector2f(x, y), scale);
 
 				gameHUD.addHUDItem(slot);
 			}

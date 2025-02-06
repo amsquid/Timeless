@@ -72,8 +72,6 @@ public class GameEngine implements Runnable {
 			glfwSwapInterval(vSync);
 
 			// Enabling stuff
-			System.out.println("Enabling depth test");
-			glEnable(GL_DEPTH_TEST);
 			System.out.println("Enabling texture 2d");
 			glEnable(GL_TEXTURE_2D);
 

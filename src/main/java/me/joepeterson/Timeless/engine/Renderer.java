@@ -60,8 +60,12 @@ public class Renderer {
 		if(activeShader != null) activeShader.unbind();
 
 		if (type == RenderingType.D2) {
+			glDisable(GL_DEPTH_TEST); // Disabling to allow for drawing transparent/translucent textures over each other
+
 			activeShader = d2Shader;
 		} else {
+			glEnable(GL_DEPTH_TEST);
+
 			activeShader = d3Shader;
 		}
 
