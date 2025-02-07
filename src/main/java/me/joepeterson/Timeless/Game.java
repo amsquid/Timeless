@@ -35,6 +35,10 @@ public class Game implements IGameLogic {
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+		// Stencil Test
+		System.out.println("Enabling stencil");
+		glEnable(GL_STENCIL_TEST);
+
 		// Setup
 		System.out.println("Setting up window");
 		this.window = window;
