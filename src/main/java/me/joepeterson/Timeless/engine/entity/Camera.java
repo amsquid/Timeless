@@ -38,8 +38,8 @@ public class Camera extends Entity {
 
 		viewMatrix = new Matrix4f();
 
-		updateMatrices(window.width, window.height, 90.0f);
-		this.startFOV = (float) Math.toRadians(90.0f);
+		updateMatrices(window.width, window.height, 70.0f);
+		this.startFOV = (float) Math.toRadians(70.0f);
 	}
 
 	public void updateMatrices(int windowWidth, int windowHeight, float fovAngle) {
