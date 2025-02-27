@@ -10,7 +10,7 @@ This is my first time properly making a game like this, so it's bound to not be 
 ### Building the Project
 To build the project, you must make sure you have `maven` installed.<br>
 On Windows, `maven` can be found at [https://maven.apache.org/download.cgi](https://maven.apache.org/download.cgi).<br>
-To build, enter the project's root directory, and type `mvn package`.<br>
+To build, enter the project's root directory, and execute the command: `mvn package`.<br>
 When running the project, make sure your working directory also contains the `assets` folder.
 
 ##
